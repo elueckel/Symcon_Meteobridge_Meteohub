@@ -21,7 +21,7 @@ if (!defined('vtBoolean')) {
 			//Properties
 			$this->RegisterPropertyInteger("SourceID", 0);
 			
-			$this->RegisterPropertyString("Server_Address", 0);
+			$this->RegisterPropertyString("Server_Address","");
 			$this->RegisterPropertyString("WeatherServer","B");
 			$this->RegisterPropertyString("User_Name", "meteobridge");
 			$this->RegisterPropertyString("Password", "meteobridge");
