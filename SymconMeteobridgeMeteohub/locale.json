@@ -1,0 +1,19 @@
+{
+	"translations": {
+		"de": { 
+			"Connection Data": "Verbindungsdaten",
+			"Weather Server": "Wetter Server",
+			"Server Address": "Server Addresse",
+			"Values to be loaded (will create variables)": "Daten die geladen werden sollen (Variablen werden erstellt)",
+			"Station ISS": "Station ISS",
+			"Temperature Sensor1": "Temperatur Sensor1",
+			"Temperature Sensor2": "Temperatur Sensor2",
+			"Temperature Sensor3": "Temperatur Sensor3",
+			"Rain": "Regen",
+			"UV Index": "UV Index",
+			"Solar Radiation": "Solar Strahlung",
+			"Update Timer (0 = off)": "Update Häufigkeit (0 = aus)",
+			"Timer": "Zeit"			
+		}
+	}
+}

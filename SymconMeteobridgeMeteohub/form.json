@@ -1,0 +1,26 @@
+{
+    "elements":
+    [
+        { "type": "Label", "label": "Connection Data" },
+		
+		{ "name": "WeatherServer", "type": "Select", "caption": "Weather Server",
+		"options": [
+			{ "label": "Meteobridge", "value": "B" },
+			{ "label": "Meteohub", "value": "H" }
+			]
+		},
+		
+		{ "type": "ValidationTextBox", "name": "Server_Address", "caption": "Server Address" },
+		{ "type": "ValidationTextBox", "name": "User_Name", "caption": "User Name" },
+		{ "type": "ValidationTextBox", "name": "Password", "caption": "Password" },
+		{ "type": "Label", "label": "Values to be loaded (will create variables)" },
+	    { "type": "CheckBox", "name": "Station_ISS", "caption": "Station ISS" },
+		{ "type": "CheckBox", "name": "Temperature_1", "caption": "Temperature Sensor1" },
+	    { "type": "CheckBox", "name": "Rain", "caption": "Rain" },
+		{ "type": "CheckBox", "name": "UV", "caption": "UV" },
+		{ "type": "CheckBox", "name": "Solar_Radiation", "caption": "Solar Radiation" },
+		{ "type": "CheckBox", "name": "Wind", "caption": "Wind" },
+		{ "type": "Label", "label": "Update Timer (0 = off)" },
+		{ "type": "IntervalBox", "name": "Timer", "caption": "Seconds" }
+    ]
+}

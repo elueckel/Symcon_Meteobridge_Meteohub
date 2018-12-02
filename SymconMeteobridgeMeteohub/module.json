@@ -1,0 +1,14 @@
+{
+    "id": "{b5c628f0-e66e-4113-a572-2d334bd9206a}",
+    "name": "Symcon_Meteobridge_Meteohub",
+    "type": 3,
+    "vendor": "(Sonstige)",
+    "aliases": 
+    [
+        "Meteobridge_Meteohub"
+    ],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "MHS"
+}
