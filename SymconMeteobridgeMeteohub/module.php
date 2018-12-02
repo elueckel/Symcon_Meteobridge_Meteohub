@@ -21,10 +21,10 @@ if (!defined('vtBoolean')) {
 			//Properties
 			$this->RegisterPropertyInteger("SourceID", 0);
 			
-			$this->RegisterPropertyString("Server_Address", "192.168.1.48");
+			$this->RegisterPropertyString("Server_Address","");
 			$this->RegisterPropertyString("WeatherServer","B");
-			$this->RegisterPropertyString("User_Name", "meteobridge");
-			$this->RegisterPropertyString("Password", "meteobridge");
+			$this->RegisterPropertyString("User_Name", "");
+			$this->RegisterPropertyString("Password", "");
 			$this->RegisterPropertyBoolean("Station_ISS",0);
 			$this->RegisterPropertyBoolean("Temperature_1", 0);
 			//$this->RegisterPropertyBoolean("Temperature_2", 0);
@@ -36,10 +36,7 @@ if (!defined('vtBoolean')) {
 			$this->RegisterPropertyInteger("Timer", 10);
 			$this->RegisterPropertyBoolean("Debug", 0);
 			
-			//Legacy ... wenn man eine Var beim Erstellen erstellen will
-			//$this->RegisterVariableFloat("BaseStation", "Base Temperature", "~Temperature");
-			
-						
+									
 			//Component sets timer, but default is OFF
 			$this->RegisterTimer("UpdateTimer",0,"MHS_SyncStation(\$_IPS['TARGET']);");			
 		}
