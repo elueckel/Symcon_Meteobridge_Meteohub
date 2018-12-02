@@ -3,7 +3,7 @@
 		"de": { 
 			"Connection Data": "Verbindungsdaten",
 			"Weather Server": "Wetter Server",
-			"Server Address": "Server Addresse",
+			"Server Address": "Serveradresse",
 			"Values to be loaded (will create variables)": "Daten die geladen werden sollen (Variablen werden erstellt)",
 			"Station ISS": "Station ISS",
 			"Temperature Sensor1": "Temperatur Sensor1",
