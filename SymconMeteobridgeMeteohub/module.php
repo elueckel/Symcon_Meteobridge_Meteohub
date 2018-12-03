@@ -111,7 +111,7 @@ if (!defined('vtBoolean')) {
 		{
 			$xml = simplexml_load_file('http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/livedataxml.cgi');
 		}
-		else($this->ReadPropertyString("WeatherServer") == "M")
+		elseif($this->ReadPropertyString("WeatherServer") == "M")
 		{
 			//$xml = simplexml_load_file('http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/meteolog.cgi?mode=data&type=xml&quotes=1');
 			$xml = simplexml_load_file('http://'.$Server_Address.'/meteolog.cgi?mode=data&type=xml&quotes=1');
@@ -121,6 +121,7 @@ if (!defined('vtBoolean')) {
 		If ($this->ReadPropertyBoolean("Station_ISS") == 1)
 		{
 			//$xml = simplexml_load_file('http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/livedataxml.cgi');
+			print_r($xml);
 			$THB_XML = $xml->THB;
 			$sourceID = $this->ReadPropertyInteger("SourceID");
 			
