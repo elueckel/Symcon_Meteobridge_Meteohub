@@ -111,9 +111,10 @@ if (!defined('vtBoolean')) {
 		{
 			$xml = simplexml_load_file('http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/livedataxml.cgi');
 		}
-		elseif($this->ReadPropertyString("WeatherServer") == "M")
+		elseif($this->ReadPropertyString("WeatherServer") == "H")
 		{
 			$xml = simplexml_load_file('http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/meteolog.cgi?mode=data&type=xml&quotes=1');
+			//$xml = simplexml_load_file('http://'.$Server_Address.'/meteolog.cgi?mode=data&type=xml&quotes=1');
 		}
 		
 			
@@ -219,7 +220,7 @@ if (!defined('vtBoolean')) {
 			$UV_XML = $xml->UV;
 			$sourceID = $this->ReadPropertyInteger("SourceID");
 			
-			$UV_Index = ($UV_XML['rate']);
+			$UV_Index = ($UV_XML['index']);
 			SetValue($this->GetIDForIdent("UV_Index"), (integer)$UV_Index);
 			
 			//$UV_Lowbat = (!$UV_XML['lowbat']);		
@@ -234,7 +235,7 @@ if (!defined('vtBoolean')) {
 			$Solar_Radiation_XML = $xml->SOL;
 			$sourceID = $this->ReadPropertyInteger("SourceID");
 			
-			$Solar_Radiation = ($Solar_Radiation_XML['rate']);
+			$Solar_Radiation = ($Solar_Radiation_XML['rad']);
 			SetValue($this->GetIDForIdent("Solar_Radiation"), (float)$Solar_Radiation);
 			
 			//$Solar_Radiation_Lowbat = (!$Solar_Radiation_XML['lowbat']);		
