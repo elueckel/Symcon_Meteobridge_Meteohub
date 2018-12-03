@@ -111,10 +111,10 @@ if (!defined('vtBoolean')) {
 		{
 			$xml = simplexml_load_file('http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/livedataxml.cgi');
 		}
-		elseif($this->ReadPropertyString("WeatherServer") == "M")
+		elseif($this->ReadPropertyString("WeatherServer") == "H")
 		{
-			//$xml = simplexml_load_file('http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/meteolog.cgi?mode=data&type=xml&quotes=1');
-			$xml = simplexml_load_file('http://'.$Server_Address.'/meteolog.cgi?mode=data&type=xml&quotes=1');
+			$xml = simplexml_load_file('http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/meteolog.cgi?mode=data&type=xml&quotes=1');
+			//$xml = simplexml_load_file('http://'.$Server_Address.'/meteolog.cgi?mode=data&type=xml&quotes=1');
 		}
 		
 			
