@@ -219,7 +219,7 @@ if (!defined('vtBoolean')) {
 			$UV_XML = $xml->UV;
 			$sourceID = $this->ReadPropertyInteger("SourceID");
 			
-			$UV_Index = ($UV_XML['rate']);
+			$UV_Index = ($UV_XML['index']);
 			SetValue($this->GetIDForIdent("UV_Index"), (integer)$UV_Index);
 			
 			//$UV_Lowbat = (!$UV_XML['lowbat']);		
@@ -234,7 +234,7 @@ if (!defined('vtBoolean')) {
 			$Solar_Radiation_XML = $xml->SOL;
 			$sourceID = $this->ReadPropertyInteger("SourceID");
 			
-			$Solar_Radiation = ($Solar_Radiation_XML['rate']);
+			$Solar_Radiation = ($Solar_Radiation_XML['rad']);
 			SetValue($this->GetIDForIdent("Solar_Radiation"), (float)$Solar_Radiation);
 			
 			//$Solar_Radiation_Lowbat = (!$Solar_Radiation_XML['lowbat']);		
