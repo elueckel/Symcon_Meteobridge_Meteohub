@@ -1,8 +1,8 @@
 ## Funktionsumfang
-Upload von diversen Wetterdaten an Wunderground (setzt das vorherige einrichten einer PWS - Personal Weather Station) innerhalb von Wunderground voraus. Sind Werte nicht gesetzt überspringt das Modul diese - es müssen nicht alle Werte geladen werden.
+Das Modul lädt diverse Wetterdaten von Meteobridge und Meteohub Servern herunter und stellt sie in Symcon als Variablen zur Verfügung. Dadurch lassen sich z.B. Davis Vantage, Vue und andere Wetterstationen relativ einfach integrieren.
 
 ## Voraussetzungen
-IP-Symcon ab Version 4.x
+IP-Symcon ab Version 5.x (darauf wurde entwickelt - sollte aber auch mit Version 4.x funktionieren (evtl. Probleme wegen verwendeter Profile).
 
 ## Software-Installation
 Über das Modul-Control folgende URL hinzufügen.
@@ -13,21 +13,34 @@ Unter "Instanz hinzufügen" ist das 'WundergroundPWSSync'-Modul unter dem Herste
 
 ## Konfigurationsseite:
 
-* WU ID: Name der Wetterstation, z.B. IHESSENB46
-* WU Passwort: Passwort welches für den Wunderground Account hinterlegt wurde
+Wetter Server: Auswahl des Protokolls (die XML Aufrufe unterscheiden sich)
+Serveradresse: IP oder DNS Name des Meteobridge oder Meteohub Servers
+Benutzername / Kennwort: Anmeldedaten am Wetterserver
 
-Felder in Version 1.0
-* Temperatur Aussen in C (wind in Fahrenheit im Modul umgerechnet)
-* Luftfeuchtigkeit in %
-* Taupunkt in C (wird in Fahrenheit im Modul umgerechnet)
-* Windrichtung in Grad
-* Wind - Durchschnitt in m/s (wird im Modulumgerechnet in mph)
-* Wind - Böen in m/s (wird im Modulumgerechnet in mph)
-* Regen letzte Stunde in mm (wird umgerechnet in inch)
-* Regen letzte 24 in mm (wird umgerechnet in inc)
-* Luftdruck in HPA (wird in BPI im Modul umgerechnet)
-* UV Index (1-12)
-* Update Timer, in Sekunden (wie oft Daten an WU übermittelt werden)
+Daten Hier können die Sensoren ausgewählt werden.
+
+Version 1.0 02/12/2018
+- Temperatur 1 (normalerweise Teil der Wetterstation)
+- Regen
+- UV
+- Solarstrahlung
+- Wind
+- Ein Timer zur einstellen des Intervalls
+
+- Variablen werden nur bei aktiver Auswahl erstellt.
+
+
+Version 1.1 03/12/2018
+- Fix Meteohub
+- Fix Solarradtion und UV Daten werden nicht geladen
+
+Version 2.0 04/12/2018
+- Added Hinzufügen von Profil für Solarstrahlung w/m2
+- Added Hinzufügen von Profil für Bodenfeuchte cb
+- Erzeugen von High Frequency Variablen für Markisen (Temp, Wind, Böen) und eigenem Timer
+- Hinzufügen von Abfragen für Blattfeuchte (leider noch nicht getestet)
+- Hinzufügen von Abfragen für Bodenfeuchte & -temperatur (leider noch nicht getestet)
+
 
 ## Wo finde ich Informationen ob das Modul funktioniert
-Das Modul postet Informationen in die Debugübersicht des Moduls und nicht in Log (Stand V1.0). Dort sieht man wie die Werte aktualisiert werden und ob der Upload funktioniert. In Wunderground werden die Werte übrigens nicht ständig aktualisiert, somit nicht wundern wenn nicht ständig neue Werte in der Tabelle der Wetterstation auftauchen.
+Das Modul postet Informationen ins Log (Stand V2.0). Die meisten Fehler kommen durch fehlende Werte. 
