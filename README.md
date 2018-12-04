@@ -19,22 +19,21 @@ Benutzername / Kennwort: Anmeldedaten am Wetterserver
 
 Daten Hier können die Sensoren ausgewählt werden.
 
-Version 1.0 02/12/2018
+### Version 1.0 02/12/2018
 - Temperatur 1 (normalerweise Teil der Wetterstation)
 - Regen
 - UV
 - Solarstrahlung
 - Wind
 - Ein Timer zur einstellen des Intervalls
-
 - Variablen werden nur bei aktiver Auswahl erstellt.
 
 
-Version 1.1 03/12/2018
+### Version 1.1 03/12/2018
 - Fix Meteohub
 - Fix Solarradtion und UV Daten werden nicht geladen
 
-Version 2.0 04/12/2018
+### Version 2.0 04/12/2018
 - Added Hinzufügen von Profil für Solarstrahlung w/m2
 - Added Hinzufügen von Profil für Bodenfeuchte cb
 - Erzeugen von High Frequency Variablen für Markisen (Temp, Wind, Böen) und eigenem Timer
@@ -43,4 +42,4 @@ Version 2.0 04/12/2018
 
 
 ## Wo finde ich Informationen ob das Modul funktioniert
-Das Modul postet Informationen ins Log (Stand V2.0). Die meisten Fehler kommen durch fehlende Werte. 
+Das Modul postet Informationen ins Log (Stand V2.0). 
