@@ -18,13 +18,20 @@ Unter "Instanz hinzufügen" ist das 'WundergroundPWSSync'-Modul unter dem Herste
 * Benutzername / Kennwort: Anmeldedaten am Wetterserver
 
 Daten
-Hier können die Sensoren ausgewählt werden. Version 1.0 umfasst:
+Hier können die Sensoren ausgewählt werden. 
+
+Version 1.0 umfasst:
 * Daten der Station
 * Temperatur 1 (normalerweise Teil der Wetterstation)
 * Regen
 * UV
 * Solarstrahlung
 * Wind
+
+Version 1.1
+- Fix Meteohub
+- Fix Solarradtion und UV Daten werden nicht geladen
+
 
 !!! WICHTIG: Variablen werden nur angelegt wenn die Checkbox gewählt ist und sie werden gelöscht wenn die Funktion abgewählt wird (wichtig im Archiv!!!
 
