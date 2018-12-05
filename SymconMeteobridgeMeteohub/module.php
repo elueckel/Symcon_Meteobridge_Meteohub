@@ -43,7 +43,7 @@ if (!defined('vtBoolean')) {
 			//Creation of Weather Warning Variables
 			$this->RegisterVariableFloat('Warning_Wind_Gust', $this->Translate('_Warning Wind Gust'), "~WindSpeed.ms");
 			$this->RegisterVariableFloat('Warning_Wind_Speed', $this->Translate('_Warning Wind Speed'), "~WindSpeed.ms");
-			$this->RegisterVariableFloat('Warning_Sensor1_Temperature', $this->Translate('_Warning Sensor 1 Temperature'), "~Temperature");
+			//$this->RegisterVariableFloat('Warning_Sensor1_Temperature', $this->Translate('_Warning Sensor 1 Temperature'), "~Temperature");
 									
 			//Component sets timer, but default is OFF
 			$this->RegisterTimer("UpdateTimer",0,"MHS_SyncStation(\$_IPS['TARGET']);");
@@ -363,12 +363,13 @@ if (!defined('vtBoolean')) {
 				$xml = simplexml_load_file('http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/meteolog.cgi?mode=data&type=xml&quotes=1');
 			}
 			
+			/*
 			$TH_XML = $xml->TH;
 			$sourceID = $this->ReadPropertyInteger("SourceID");
 				
 			$TH_Temp = ($TH_XML['temp']);
 			SetValue($this->GetIDForIdent("Warning_Sensor1_Temperature"), (float)$TH_Temp);
-			
+			*/
 			$Wind_XML = $xml->WIND;
 			$sourceID = $this->ReadPropertyInteger("SourceID");
 					
