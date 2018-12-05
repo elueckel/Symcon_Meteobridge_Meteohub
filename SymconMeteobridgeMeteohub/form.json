@@ -14,9 +14,9 @@
 		{ "type": "ValidationTextBox", "name": "User_Name", "caption": "User Name" },
 		{ "type": "ValidationTextBox", "name": "Password", "caption": "Password" },
 		{ "type": "Label", "label": "Values to be loaded (will create variables)" },
-	    { "type": "CheckBox", "name": "Station_ISS", "caption": "Station ISS" },
+	   	{ "type": "CheckBox", "name": "Station_ISS", "caption": "Station ISS" },
 		{ "type": "CheckBox", "name": "Temperature_1", "caption": "Temperature Sensor 1" },
-	    { "type": "CheckBox", "name": "Rain", "caption": "Rain" },
+	    	{ "type": "CheckBox", "name": "Rain", "caption": "Rain" },
 		{ "type": "CheckBox", "name": "UV", "caption": "UV" },
 		{ "type": "CheckBox", "name": "Solar_Radiation", "caption": "Solar Radiation"},
 		{ "type": "CheckBox", "name": "Wind", "caption": "Wind" },
@@ -24,7 +24,7 @@
 		{ "type": "CheckBox", "name": "Soil_Moisture_1", "caption": "Soil Moisture and Temperature 1" },
 		{ "type": "CheckBox", "name": "Leaf_Wetness_1", "caption": "Leaf Wetness 1" },
 		{ "type": "Label", "label": "Update Timer (0 = off)" },
-		{ "type": "IntervalBox", "name": "Timer", "caption": "Standard Timer (sec)" },
-		{ "type": "IntervalBox", "name": "WarningTimer", "caption": "Warning Timer (sec)" }
+		{ "type": "IntervalBox", "name": "Timer", "caption": "Standard Timer" },
+		{ "type": "IntervalBox", "name": "WarningTimer", "caption": "Warning Timer" }
     ]
 }
