@@ -16,8 +16,8 @@
 			"Turf Sensors (untested)": "Bodensensoren (ungetestet)",
 			"Soil Moisture and Temperature 1": "Bodenfeuchte und - temperatur 1",
 			"Update Timer (0 = off)": "Update Häufigkeit (0 = aus)",
-			"Standard Timer (sec)": "Standard Interval (sec)",
-			"Warning Timer (sec)": "Warnungs Interval (sec)"			
+			"Standard Timer": "Standard Interval",
+			"Warning Timer": "Warnungs Interval"			
 		}
 	}
 }
