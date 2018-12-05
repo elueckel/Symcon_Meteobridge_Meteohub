@@ -12,8 +12,12 @@
 			"Rain": "Regen",
 			"UV Index": "UV Index",
 			"Solar Radiation": "Solar Strahlung",
+			"Leaf Wetness 1": "Blattfeuchte 1",
+			"Turf Sensors (untested)": "Bodensensoren (ungetestet)",
+			"Soil Moisture and Temperature 1": "Bodenfeuchte und - temperatur 1",
 			"Update Timer (0 = off)": "Update Häufigkeit (0 = aus)",
-			"Timer": "Zeit"			
+			"Standard Timer": "Standard Interval",
+			"Warning Timer": "Warnungs Interval"			
 		}
 	}
 }
