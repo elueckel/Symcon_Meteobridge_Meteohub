@@ -87,7 +87,7 @@ if (!defined('vtBoolean')) {
 				IPS_SetVariableProfileIcon("MHS.SoilMoisture",  "Drops");
 				}
 				
-				/* might move to other component 
+				
 				
 				if (IPS_VariableProfileExists("MHS.Windspeed_Text") == false){
 				IPS_CreateVariableProfile("MHS.Windspeed_Text", 2);
@@ -108,7 +108,7 @@ if (!defined('vtBoolean')) {
 				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 28.5, "11 - orkanartiger Sturm","",-1);
 				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 32.7, "12 - Orkan","",-1);
 				}
-				*/	
+					
 				
 				//Station variables 
 				
@@ -254,8 +254,8 @@ if (!defined('vtBoolean')) {
 				$Wind_Speed = ($Wind_XML['wind']);		
 				SetValue($this->GetIDForIdent("Wind_Speed"), (float)$Wind_Speed);
 				
-				//$Wind_Speed = ($Wind_XML['wind']);		
-				//SetValue($this->GetIDForIdent("Wind_Speed_Text"), (float)$Wind_Speed);
+				$Wind_Speed = ($Wind_XML['wind']);		
+				SetValue($this->GetIDForIdent("Wind_Speed_Text"), (float)$Wind_Speed);
 				
 				$Wind_Chill = ($Wind_XML['chill']);		
 				SetValue($this->GetIDForIdent("Wind_Chill"), (float)$Wind_Chill);
