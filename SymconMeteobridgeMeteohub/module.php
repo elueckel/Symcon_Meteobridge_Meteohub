@@ -304,7 +304,7 @@ if (!defined('vtBoolean')) {
 				$Solar_Radiation_XML = $xml->SOL;
 				$sourceID = $this->ReadPropertyInteger("SourceID");
 				
-				$Solar_Radiation = ($Solar_Radiation_XML['index']);
+				$Solar_Radiation = ($Solar_Radiation_XML['rad']);
 				SetValue($this->GetIDForIdent("Solar_Radiation"), (integer)$Solar_Radiation);
 				
 				//$Solar_Radiation_Lowbat = (!$Solar_Radiation_XML['lowbat']);		
