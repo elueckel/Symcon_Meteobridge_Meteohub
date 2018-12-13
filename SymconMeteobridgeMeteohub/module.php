@@ -87,7 +87,7 @@ if (!defined('vtBoolean')) {
 				IPS_SetVariableProfileIcon("MHS.SoilMoisture",  "Drops");
 				}
 				
-				/* might move to other component 
+				
 				
 				if (IPS_VariableProfileExists("MHS.Windspeed_Text") == false){
 				IPS_CreateVariableProfile("MHS.Windspeed_Text", 2);
@@ -108,7 +108,7 @@ if (!defined('vtBoolean')) {
 				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 28.5, "11 - orkanartiger Sturm","",-1);
 				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 32.7, "12 - Orkan","",-1);
 				}
-				*/	
+					
 				
 				//Station variables 
 				
@@ -130,7 +130,7 @@ if (!defined('vtBoolean')) {
 				$this->MaintainVariable('Wind_Direction_Text', $this->Translate('Wind Direction Text'), vtFloat, "~WindDirection.Text", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
 				$this->MaintainVariable('Wind_Gust', $this->Translate('Wind Gust'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
 				$this->MaintainVariable('Wind_Speed', $this->Translate('Wind Speed'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
-				//$this->MaintainVariable('Wind_Speed_Text', $this->Translate('Wind Speed Text'), vtFloat, "MHS.Windspeed_Text", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
+				$this->MaintainVariable('Wind_Speed_Text', $this->Translate('Wind Speed Text'), vtFloat, "MHS.Windspeed_Text", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
 				$this->MaintainVariable('Wind_Chill', $this->Translate('Wind Chill'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
 				$this->MaintainVariable('Wind_LowBat', $this->Translate('Wind Low Battery'), vtBoolean, "~Battery", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
 				
@@ -254,8 +254,8 @@ if (!defined('vtBoolean')) {
 				$Wind_Speed = ($Wind_XML['wind']);		
 				SetValue($this->GetIDForIdent("Wind_Speed"), (float)$Wind_Speed);
 				
-				//$Wind_Speed = ($Wind_XML['wind']);		
-				//SetValue($this->GetIDForIdent("Wind_Speed_Text"), (float)$Wind_Speed);
+				$Wind_Speed = ($Wind_XML['wind']);		
+				SetValue($this->GetIDForIdent("Wind_Speed_Text"), (float)$Wind_Speed);
 				
 				$Wind_Chill = ($Wind_XML['chill']);		
 				SetValue($this->GetIDForIdent("Wind_Chill"), (float)$Wind_Chill);
@@ -304,7 +304,7 @@ if (!defined('vtBoolean')) {
 				$Solar_Radiation_XML = $xml->SOL;
 				$sourceID = $this->ReadPropertyInteger("SourceID");
 				
-				$Solar_Radiation = ($Solar_Radiation_XML['index']);
+				$Solar_Radiation = ($Solar_Radiation_XML['rad']);
 				SetValue($this->GetIDForIdent("Solar_Radiation"), (integer)$Solar_Radiation);
 				
 				//$Solar_Radiation_Lowbat = (!$Solar_Radiation_XML['lowbat']);		
