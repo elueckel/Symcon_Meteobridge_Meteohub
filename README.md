@@ -36,11 +36,15 @@ Daten Hier können die Sensoren ausgewählt werden.
 - Fix Solarradtion und UV Daten werden nicht geladen
 
 ### Version 2.0 04/12/2018
-- Added Hinzufügen von Profil für Solarstrahlung w/m2
-- Added Hinzufügen von Profil für Bodenfeuchte cb
-- Erzeugen von High Frequency Variablen für Markisen (Temp, Wind, Böen) und eigenem Timer
-- Hinzufügen von Abfragen für Blattfeuchte (leider noch nicht getestet)
-- Hinzufügen von Abfragen für Bodenfeuchte & -temperatur (leider noch nicht getestet)
+- Neu Hinzufügen von Profil für Solarstrahlung w/m2
+- Neu Hinzufügen von Profil für Bodenfeuchte cb
+- Neu Hinzufügen von High Frequency Variablen für Markisen (Temp, Wind, Böen) und eigenem Timer
+- Neu Hinzufügen von Abfragen für Blattfeuchte (leider noch nicht getestet)
+- Neu Hinzufügen von Abfragen für Bodenfeuchte & -temperatur (leider noch nicht getestet)
+
+### Version 2.1 04/12/2018
+- Neu Variable die die Windgeschwindigkeit in Text ausgibt
+- Fix Solarstrahlung wurde nicht ausgelesen
 
 ## Wo finde ich Informationen ob das Modul funktioniert
 Das Modul postet Informationen ins Log (Stand V2.0). 
