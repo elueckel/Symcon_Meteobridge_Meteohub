@@ -35,6 +35,8 @@ if (!defined('vtBoolean')) {
 			$this->RegisterPropertyBoolean("Solar_Radiation", 0);
 			$this->RegisterPropertyBoolean("Soil_Moisture_1", 0);
 			$this->RegisterPropertyBoolean("Leaf_Wetness_1", 0);
+			$this->RegisterPropertyBoolean("Evaporation", 0);
+			$this->RegisterPropertyBoolean("Statistics", 0);
 			$this->RegisterPropertyBoolean("Wind", 0);
 			$this->RegisterPropertyInteger("Timer", 0);
 			$this->RegisterPropertyInteger("WarningTimer", 0);
@@ -48,6 +50,7 @@ if (!defined('vtBoolean')) {
 			//Component sets timer, but default is OFF
 			$this->RegisterTimer("UpdateTimer",0,"MHS_SyncStation(\$_IPS['TARGET']);");
 			$this->RegisterTimer("WarningTimer",0,"MHS_WeatherWarning(\$_IPS['TARGET']);");
+			
 			
 	
 		}
@@ -70,6 +73,35 @@ if (!defined('vtBoolean')) {
 				$this->SetTimerInterval("WarningTimer",$WarningTimerMS);
     			
 				$vpos = 4;
+				
+				//Statics Timer Creation - On - Off
+				
+				$sourceID = $this->ReadPropertyInteger("SourceID");
+		
+				$eid = @IPS_GetObjectIDByIdent("WeatherStatistics", $this->InstanceID);
+				if ($eid == 0) {
+					$eid = IPS_CreateEvent(1);
+					IPS_SetParent($eid, $this->InstanceID);
+					IPS_SetIdent($eid, "WeatherStatistics");
+					IPS_SetName($eid, "WeatherStatistics");
+					IPS_SetHidden($eid, true);
+					IPS_SetEventCyclic($eid, 2, 1, 0, 0, 0, 0);    //Jeden Tag
+					IPS_SetEventCyclicTimeFrom($eid, 23, 58, 0);
+					IPS_SetEventScript($eid, 'MHS_Statistics($_IPS[\'TARGET\'], "Up");');
+				}
+				
+				If ($this->ReadPropertyBoolean("Statistics") == 1)
+				{
+					$eid = @IPS_GetObjectIDByIdent("WeatherStatistics", $this->InstanceID);
+					IPS_SetEventActive($eid, true);
+				}
+				
+				If ($this->ReadPropertyBoolean("Statistics") == 0)
+				{
+					$eid = @IPS_GetObjectIDByIdent("WeatherStatistics", $this->InstanceID);
+					IPS_SetEventActive($eid, false);
+				}
+				
 				
 				//Creation of Custom Variables
 								
@@ -107,6 +139,14 @@ if (!defined('vtBoolean')) {
 				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 24.5, "10 - schwerer Sturm","",-1);
 				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 28.5, "11 - orkanartiger Sturm","",-1);
 				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 32.7, "12 - Orkan","",-1);
+				}
+				
+				if (IPS_VariableProfileExists("MHS.Evaporation") == false){
+				IPS_CreateVariableProfile("MHS.Evaporation", 2);
+				IPS_SetVariableProfileValues("MHS.Evaporation", 0, 0, 1);
+				IPS_SetVariableProfileDigits("MHS.Evaporation", 1);
+				IPS_SetVariableProfileText("MHS.Evaporation", "", " mm");
+				IPS_SetVariableProfileIcon("MHS.Evaporation",  "Climate");
 				}
 					
 				
@@ -159,6 +199,9 @@ if (!defined('vtBoolean')) {
 				$this->MaintainVariable('Leaf_Wetness1', $this->Translate('Leaf Wetness 1'), vtFloat, "", $vpos++, $this->ReadPropertyBoolean("Leaf_Wetness_1") == 1);
 				//$this->MaintainVariable('Leaf_Wetness1_LowBat', $this->Translate('Leaf Wetness1 Low Battery'), vtBoolean, "~Battery", $vpos++, $this->ReadPropertyBoolean("Leaf Wetness1") == 1);
 				
+				//Evaporation calculation from Vantage
+				$this->MaintainVariable('Evaporation', $this->Translate('Evaporation'), vtFloat, "MHS.Evaporation", $vpos++, $this->ReadPropertyBoolean("Evaporation") == 1);
+								
 				//Weather Warning Variables - stays in for now ... just in case it is needed
 				//$this->RegisterVariable('Warning_Wind_Gust', $this->Translate('_Warning Wind Gust'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyInteger("WarningTimer") > "0");
 				//$this->MaintainVariable('Warning_Wind_Speed', $this->Translate('_Warning Wind Speed'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyInteger("Wind") == 1);
@@ -343,6 +386,23 @@ if (!defined('vtBoolean')) {
 					
 			}
 			
+			
+			If ($this->ReadPropertyBoolean("Evaporation") == 1)
+			{
+					
+				$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[sol0evo-act]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$evo = curl_exec($ch);
+				$this->SendDebug('Result', $evo,0);
+				$this->SendDebug('Result trim', trim($evo),0);
+				SetValue($this->GetIDForIdent("Evaporation"), (float)trim($evo));
+				curl_close($ch);  
+					
+			}
+			
+			
+			
 		}
 		
 		// Section run on a second more frequent timer intended for weather warnings
@@ -379,6 +439,159 @@ if (!defined('vtBoolean')) {
 			$Wind_Speed = ($Wind_XML['wind']);		
 			SetValue($this->GetIDForIdent("Warning_Wind_Speed"), (float)$Wind_Speed);
 			
+		}
+		
+		public function Statistics()
+		{
+			
+			//Create Statics Variables 
+			
+			$vpos = 50;
+			
+			$this->MaintainVariable('Stat_Temp_S1_Min', $this->Translate('Statistic Temperatur Sensor1 Min'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Temp_S1_Max', $this->Translate('Statistic Temperatur Sensor1 Max'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Hum_S1_Min', $this->Translate('Statistic Humidity Sensor1 Min'), vtInteger, "~Humidity", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Hum_S1_Max', $this->Translate('Statistic Humidity Sensor1 Max'), vtInteger, "~Humidity", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Pres_Min', $this->Translate('Statistic Pressure Min'), vtInteger, "~AirPressure", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Pres_Max', $this->Translate('Statistic Pressure Max'), vtInteger, "~AirPressure", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Dew_S1_Min', $this->Translate('Statistic Dewpoint Sensor1 Min'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Dew_S1_Max', $this->Translate('Statistic Dewpoint Sensor1 Max'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Wind_Min', $this->Translate('Statistic Wind Min'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Wind_Max', $this->Translate('Statistic Wind Max'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Gust_Min', $this->Translate('Statistic Gusts Min'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Gust_Max', $this->Translate('Statistic Gusts Max'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);			
+			$this->MaintainVariable('Stat_Windchill_Min', $this->Translate('Statistic Windchill Min'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Windchill_Max', $this->Translate('Statistic Windchill Max'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_UV', $this->Translate('Statistic UV'), vtInteger, "~UVIndex", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Sol', $this->Translate('Statistic Solar Radiation'), vtFloat, "MHS.Solarradiation", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Evo', $this->Translate('Statistic Evaporation'), vtFloat, "MHS.Evaporation", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			
+			// Query Meteobrdige for data
+			
+			$Server_Address = $this->ReadPropertyString("Server_Address");
+			$User_Name = $this->ReadPropertyString("User_Name");
+			$Password = $this->ReadPropertyString("Password");	
+			
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th0temp-dmin]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Temp_S1_Min = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Temp_S1_Min"), (float)trim($Stat_Temp_S1_Min));
+				curl_close($ch); 
+				
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th0temp-dmax]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Temp_S1_Max = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Temp_S1_Max"), (float)trim($Stat_Temp_S1_Max));
+				curl_close($ch); 
+
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th0hum-dmin]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Hum_S1_Min = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Hum_S1_Min"), (integer)trim($Stat_Hum_S1_Min));
+				curl_close($ch); 
+				
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th0hum-dmax]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Hum_S1_Max = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Hum_S1_Max"), (integer)trim($Stat_Hum_S1_Max));
+				curl_close($ch); 				
+				
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[thb0pres-dmin]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Pres_Min = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Pres_Min"), (float)trim($Stat_Pres_Min));
+				curl_close($ch); 
+				
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[thb0pres-dmax]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Pres_Max = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Pres_Max"), (float)trim($Stat_Pres_Max));
+				curl_close($ch); 								
+			
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th0dew-dmin]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Dew_S1_Min = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Dew_S1_Min"), (float)trim($Stat_Dew_S1_Min));
+				curl_close($ch); 
+				
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th0dew-dmax]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Dew_S1_Max = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Dew_S1_Max"), (float)trim($Stat_Dew_S1_Max));
+				curl_close($ch); 
+			
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[wind0avgwind-dmin]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Wind_Min = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Wind_Min"), (float)trim($Stat_Wind_Min));
+				curl_close($ch); 
+				
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[wind0avgwind-dmax]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Wind_Max = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Wind_Max"), (float)trim($Stat_Wind_Max));
+				curl_close($ch); 			
+			
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[wind0wind-dmin]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Gust_Min = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Gust_Min"), (float)trim($Stat_Gust_Min));
+				curl_close($ch); 
+				
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[wind0wind-dmax]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Gust_Max = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Gust_Max"), (float)trim($Stat_Gust_Max));
+				curl_close($ch); 
+			
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[wind0chill-dmin]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Windchill_Min = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Windchill_Min"), (float)trim($Stat_Windchill_Min));
+				curl_close($ch); 
+				
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[wind0chill-dmax]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Windchill_Max = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Windchill_Max"), (float)trim($Stat_Windchill_Max));
+				curl_close($ch); 			
+
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[uv0-dmax]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_UV = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_UV"), (integer)trim($Stat_UV));
+				curl_close($ch); 				
+			
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[sol0rad-dmax]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Sol = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Sol"), (float)trim($Stat_Sol));
+				curl_close($ch);
+				
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[sol0evo-dmax]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Evo = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Evo"), (float)trim($Stat_Evo));
+				curl_close($ch);				
+				
+				
 		}
 		
 		
