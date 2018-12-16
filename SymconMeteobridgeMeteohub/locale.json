@@ -15,6 +15,9 @@
 			"Leaf Wetness 1": "Blattfeuchte 1",
 			"Turf Sensors (untested)": "Bodensensoren (ungetestet)",
 			"Soil Moisture and Temperature 1": "Bodenfeuchte und - temperatur 1",
+			"Evaporation (Vantage PWS only)": "Evaporation (nur für Vantage Station)",
+			"Statistics (requires Meteobridge)": "Statistikdaten (nur Meteobridge)",
+			"Statistics": "Statistik",
 			"Update Timer (0 = off)": "Update Häufigkeit (0 = aus)",
 			"Standard Timer": "Standard Interval",
 			"Warning Timer": "Warnungs Interval"			
