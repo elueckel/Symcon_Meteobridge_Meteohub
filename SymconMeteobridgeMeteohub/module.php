@@ -464,6 +464,7 @@ if (!defined('vtBoolean')) {
 			$this->MaintainVariable('Stat_Sol', $this->Translate('Statistic Solar Radiation'), vtFloat, "MHS.Solarradiation", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			$this->MaintainVariable('Stat_Evo', $this->Translate('Statistic Evaporation'), vtFloat, "MHS.Evaporation", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			$this->MaintainVariable('Stat_Rain', $this->Translate('Statistic Rain'), vtFloat, "~Rainfall", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Forecast_DE', $this->Translate('Forecast DE'), vtString, "", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			
 			// Query Meteobrdige for data
 			
@@ -584,7 +585,15 @@ if (!defined('vtBoolean')) {
 				$Stat_Rain = curl_exec($ch);
 				SetValue($this->GetIDForIdent("Stat_Rain"), (float)trim($Stat_Rain));
 				curl_close($ch);
-				
+
+			
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[forecast-textdehtml]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Forecast_DE = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Forecast_DE"), (float)trim($Forecast_DE));
+				curl_close($ch);
+			
 		}
 		
 		
