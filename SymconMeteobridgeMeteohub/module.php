@@ -456,15 +456,14 @@ if (!defined('vtBoolean')) {
 			$this->MaintainVariable('Stat_Pres_Max', $this->Translate('Statistic Pressure Max'), vtInteger, "~AirPressure", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			$this->MaintainVariable('Stat_Dew_S1_Min', $this->Translate('Statistic Dewpoint Sensor1 Min'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			$this->MaintainVariable('Stat_Dew_S1_Max', $this->Translate('Statistic Dewpoint Sensor1 Max'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
-			$this->MaintainVariable('Stat_Wind_Min', $this->Translate('Statistic Wind Min'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			$this->MaintainVariable('Stat_Wind_Max', $this->Translate('Statistic Wind Max'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
-			$this->MaintainVariable('Stat_Gust_Min', $this->Translate('Statistic Gusts Min'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			$this->MaintainVariable('Stat_Gust_Max', $this->Translate('Statistic Gusts Max'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);			
 			$this->MaintainVariable('Stat_Windchill_Min', $this->Translate('Statistic Windchill Min'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			$this->MaintainVariable('Stat_Windchill_Max', $this->Translate('Statistic Windchill Max'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			$this->MaintainVariable('Stat_UV', $this->Translate('Statistic UV'), vtInteger, "~UVIndex", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			$this->MaintainVariable('Stat_Sol', $this->Translate('Statistic Solar Radiation'), vtFloat, "MHS.Solarradiation", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			$this->MaintainVariable('Stat_Evo', $this->Translate('Statistic Evaporation'), vtFloat, "MHS.Evaporation", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Rain', $this->Translate('Statistic Rain'), vtFloat, "~Rainfall", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			
 			// Query Meteobrdige for data
 			
@@ -501,14 +500,14 @@ if (!defined('vtBoolean')) {
 				curl_close($ch); 				
 				
 			$ch = curl_init(); 
-				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[thb0pres-dmin]');
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[thb0press-dmin]');
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				$Stat_Pres_Min = curl_exec($ch);
 				SetValue($this->GetIDForIdent("Stat_Pres_Min"), (float)trim($Stat_Pres_Min));
 				curl_close($ch); 
 				
 			$ch = curl_init(); 
-				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[thb0pres-dmax]');
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[thb0press-dmax]');
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				$Stat_Pres_Max = curl_exec($ch);
 				SetValue($this->GetIDForIdent("Stat_Pres_Max"), (float)trim($Stat_Pres_Max));
@@ -529,25 +528,12 @@ if (!defined('vtBoolean')) {
 				curl_close($ch); 
 			
 			$ch = curl_init(); 
-				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[wind0avgwind-dmin]');
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				$Stat_Wind_Min = curl_exec($ch);
-				SetValue($this->GetIDForIdent("Stat_Wind_Min"), (float)trim($Stat_Wind_Min));
-				curl_close($ch); 
-				
-			$ch = curl_init(); 
 				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[wind0avgwind-dmax]');
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				$Stat_Wind_Max = curl_exec($ch);
 				SetValue($this->GetIDForIdent("Stat_Wind_Max"), (float)trim($Stat_Wind_Max));
 				curl_close($ch); 			
 			
-			$ch = curl_init(); 
-				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[wind0wind-dmin]');
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				$Stat_Gust_Min = curl_exec($ch);
-				SetValue($this->GetIDForIdent("Stat_Gust_Min"), (float)trim($Stat_Gust_Min));
-				curl_close($ch); 
 				
 			$ch = curl_init(); 
 				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[wind0wind-dmax]');
@@ -591,6 +577,13 @@ if (!defined('vtBoolean')) {
 				SetValue($this->GetIDForIdent("Stat_Evo"), (float)trim($Stat_Evo));
 				curl_close($ch);				
 				
+			
+			$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[rain0total-dmax]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Stat_Rain = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Stat_Rain"), (float)trim($Stat_Rain));
+				curl_close($ch);
 				
 		}
 		
