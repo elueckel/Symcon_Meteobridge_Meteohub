@@ -50,7 +50,7 @@ Daten Hier können die Sensoren ausgewählt werden.
 ### Version 3.0 16/12/2018
 - Neu bei Verwendung einer Davis Vantage inkl. Solar Radiation Sensor wird die Evoparation ausgelesen
 - Neu wenn eine Meteobridge verwendet wird, da werden aktuell die folgenden Min-Max Tagesstatistiken (via Template) gelesen
-  - Temperatur, Luftfeuchte, Luftdruck, Taupunkt, Wind, Böhen, UV, Solarstrahlung, Evoparation
+  - Temperatur (Min/Max), Luftfeuchte (Min/Max), Luftdruck (Min/Max), Taupunkt (Min/Max), Wind (Max), Böhen (Max), UV (Max), Solarstrahlung (Max), Evoparation (Max), Regen (Max)
   - Die Tageswerte, werden via Timer einmal täglich um 23.58 ausgelesen.
   - Statistikfunktion legt eine Menge an Variablen an - aktuell nicht konfigurierbar (die UI wird sonst überladen)
   - Die Tagesstatistiken können via Symcon Charts etc einfach ausgewertet werden (ich habe bewusst auf Monats, Jahres etc. Auswertungen verzichtet)
