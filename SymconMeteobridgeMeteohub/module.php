@@ -37,20 +37,20 @@ if (!defined('vtBoolean')) {
 			$this->RegisterPropertyBoolean("Leaf_Wetness_1", 0);
 			$this->RegisterPropertyBoolean("Evaporation", 0);
 			$this->RegisterPropertyBoolean("Statistics", 0);
+			$this->RegisterPropertyString("Forecast", "F_OFF");
 			$this->RegisterPropertyBoolean("Wind", 0);
 			$this->RegisterPropertyInteger("Timer", 0);
 			$this->RegisterPropertyInteger("WarningTimer", 0);
 			$this->RegisterPropertyBoolean("Debug", 0);
 			
 			//Creation of Weather Warning Variables
-			$this->RegisterVariableFloat('Warning_Wind_Gust', $this->Translate('_Warning Wind Gust'), "~WindSpeed.ms");
-			$this->RegisterVariableFloat('Warning_Wind_Speed', $this->Translate('_Warning Wind Speed'), "~WindSpeed.ms");
+			//$this->RegisterVariableFloat('Warning_Wind_Gust', $this->Translate('_Warning Wind Gust'), "~WindSpeed.ms");
+			//$this->RegisterVariableFloat('Warning_Wind_Speed', $this->Translate('_Warning Wind Speed'), "~WindSpeed.ms");
 			//$this->RegisterVariableFloat('Warning_Sensor1_Temperature', $this->Translate('_Warning Sensor 1 Temperature'), "~Temperature");
 									
 			//Component sets timer, but default is OFF
 			$this->RegisterTimer("UpdateTimer",0,"MHS_SyncStation(\$_IPS['TARGET']);");
 			$this->RegisterTimer("WarningTimer",0,"MHS_WeatherWarning(\$_IPS['TARGET']);");
-			
 			
 	
 		}
@@ -70,9 +70,10 @@ if (!defined('vtBoolean')) {
 				//Warning Timer
 				
 				$WarningTimerMS = $this->ReadPropertyInteger("WarningTimer") * 1000;
-				$this->SetTimerInterval("WarningTimer",$WarningTimerMS);
-    			
-				$vpos = 4;
+				$this->SetTimerInterval("WarningTimer",$WarningTimerMS);	
+				
+				
+				$vpos = 15;
 				
 				//Statics Timer Creation - On - Off
 				
@@ -202,10 +203,14 @@ if (!defined('vtBoolean')) {
 				//Evaporation calculation from Vantage
 				$this->MaintainVariable('Evaporation', $this->Translate('Evaporation'), vtFloat, "MHS.Evaporation", $vpos++, $this->ReadPropertyBoolean("Evaporation") == 1);
 								
-				//Weather Warning Variables - stays in for now ... just in case it is needed
-				//$this->RegisterVariable('Warning_Wind_Gust', $this->Translate('_Warning Wind Gust'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyInteger("WarningTimer") > "0");
-				//$this->MaintainVariable('Warning_Wind_Speed', $this->Translate('_Warning Wind Speed'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyInteger("Wind") == 1);
-				//$this->MaintainVariable('Warning_Sensor1_Temperature', $this->Translate('_Warning Sensor 1 Temperature'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Temperature_1") == 1);
+				//Weather Forecast
+				$this->MaintainVariable('Forecast', $this->Translate('Forecast'), vtString, "", $vpos++, $this->ReadPropertyString("Forecast") != "F_OFF");
+				
+				//Warning Variables
+				$this->MaintainVariable('Warning_Wind_Gust', $this->Translate('_Warning Wind Gust'), vtFloat, "~WindSpeed.ms", 10, $this->ReadPropertyInteger("WarningTimer") > 0);
+				$this->MaintainVariable('Warning_Wind_Speed', $this->Translate('_Warning Wind Speed'), vtFloat, "~WindSpeed.ms", 11, $this->ReadPropertyInteger("WarningTimer") > 0);
+				
+			
 				
 				
 		}
@@ -401,6 +406,30 @@ if (!defined('vtBoolean')) {
 					
 			}
 			
+			if($this->ReadPropertyString("Forecast") == "F_DE") 
+			{
+				$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[forecast-textdehtml]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Forecast = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Forecast"), (string)trim($Forecast));
+				curl_close($ch);
+			}
+			elseif($this->ReadPropertyString("Forecast") == "F_EN")
+			{
+				$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[forecast-text]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Forecast = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Forecast"), (string)trim($Forecast));
+				curl_close($ch);
+			} 
+			elseif($this->ReadPropertyString("Forecast") == "F_OFF")
+			{
+				//do nothing
+			} 
+			
+			
 			
 			
 		}
@@ -464,8 +493,7 @@ if (!defined('vtBoolean')) {
 			$this->MaintainVariable('Stat_Sol', $this->Translate('Statistic Solar Radiation'), vtFloat, "MHS.Solarradiation", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			$this->MaintainVariable('Stat_Evo', $this->Translate('Statistic Evaporation'), vtFloat, "MHS.Evaporation", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			$this->MaintainVariable('Stat_Rain', $this->Translate('Statistic Rain'), vtFloat, "~Rainfall", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
-			$this->MaintainVariable('Forecast_DE', $this->Translate('Forecast DE'), vtString, "", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
-			
+						
 			// Query Meteobrdige for data
 			
 			$Server_Address = $this->ReadPropertyString("Server_Address");
@@ -586,13 +614,6 @@ if (!defined('vtBoolean')) {
 				SetValue($this->GetIDForIdent("Stat_Rain"), (float)trim($Stat_Rain));
 				curl_close($ch);
 
-			
-			$ch = curl_init(); 
-				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[forecast-textdehtml]');
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				$Forecast_DE = curl_exec($ch);
-				SetValue($this->GetIDForIdent("Forecast_DE"), (float)trim($Forecast_DE));
-				curl_close($ch);
 			
 		}
 		
