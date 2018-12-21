@@ -477,8 +477,8 @@ if (!defined('vtBoolean')) {
 			
 			$vpos = 50;
 			
-			$this->MaintainVariable('Stat_Temp_S1_Min', $this->Translate('Statistic Temperatur Sensor1 Min'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
-			$this->MaintainVariable('Stat_Temp_S1_Max', $this->Translate('Statistic Temperatur Sensor1 Max'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Temp_S1_Min', $this->Translate('Statistic Temperature Sensor1 Min'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
+			$this->MaintainVariable('Stat_Temp_S1_Max', $this->Translate('Statistic Temperature Sensor1 Max'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			$this->MaintainVariable('Stat_Hum_S1_Min', $this->Translate('Statistic Humidity Sensor1 Min'), vtInteger, "~Humidity", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			$this->MaintainVariable('Stat_Hum_S1_Max', $this->Translate('Statistic Humidity Sensor1 Max'), vtInteger, "~Humidity", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			$this->MaintainVariable('Stat_Pres_Min', $this->Translate('Statistic Pressure Min'), vtInteger, "~AirPressure", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
