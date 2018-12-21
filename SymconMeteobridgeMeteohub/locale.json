@@ -49,7 +49,22 @@
 			"Rain Delta": "Regen Delta",
 			"Soil Moisture 1": "Bodenfeuchte 1",
 			"Soil Temperature 1": "Bodentemperatur 1",
-			
+			"Statistic Temperature Sensor1 Min": "Statistik Temperatur Sensor1 Min",
+			"Statistic Temperature Sensor1 Max": "Statistik Temperatur Sensor1 Max",
+			"Statistic Humidity Sensor1 Min": "Statistik Luftfeuchte Sensor1 Min",
+			"Statistic Humidity Sensor1 Max": "Statistik Luftfeuchte Sensor1 Max",
+			"Statistic Pressure Min": "Statistik Luftdruck Min",
+			"Statistic Pressure Max": "Statistik Luftdruck Max",
+			"Statistic Dewpoint Sensor1 Min": "Statistik Taupunkt Sensor1 Min",
+			"Statistic Dewpoint Sensor1 Max": "Statistik Taupunkt Sensor1 Max",
+			"Statistic Wind Max": "Statistik Wind Max",
+			"Statistic Gusts Max": "Statistik Windböen Max",
+			"Statistic Windchill Min": "Statistik Gefühlte Temperatur Min",
+			"Statistic Windchill Max": "Statistik Gefühlte Temperatur Max",
+			"Statistic UV": "Statistik UV",
+			"Statistic Solar Radiation": "Statistik Solar Strahlung",
+			"Statistic Evaporation": "Statistik Evaporation",
+			"Statistic Rain": "Statistik Regen"
 		}
 	}
 }
