@@ -48,7 +48,8 @@
 			"Rain Total": "Regen Total",
 			"Rain Delta": "Regen Delta",
 			"Soil Moisture 1": "Bodenfeuchte 1",
-			"Soil Temperature 1": "Bodentemperatur 1"
+			"Soil Temperature 1": "Bodentemperatur 1",
+			
 		}
 	}
 }
