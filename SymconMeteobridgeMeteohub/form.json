@@ -23,6 +23,18 @@
 		{ "type": "Label", "label": "Turf Sensors (untested)" },
 		{ "type": "CheckBox", "name": "Soil_Moisture_1", "caption": "Soil Moisture and Temperature 1" },
 		{ "type": "CheckBox", "name": "Leaf_Wetness_1", "caption": "Leaf Wetness 1" },
+		{ "type": "CheckBox", "name": "Evaporation", "caption": "Evaporation (Vantage PWS only)" },
+		{ "type": "Label", "label": "Statistics and Forecast (requires Meteobridge)" },
+		{ "type": "CheckBox", "name": "Statistics", "caption": "Statistics" },
+		
+		{ "name": "Forecast", "type": "Select", "caption": "Forecast",
+		"options": [
+			{ "label": "Off", "value": "F_OFF" },
+			{ "label": "German", "value": "F_DE" },
+			{ "label": "English", "value": "F_EN" }
+			]
+		},
+		
 		{ "type": "Label", "label": "Update Timer (0 = off)" },
 		{ "type": "IntervalBox", "name": "Timer", "caption": "Standard Timer" },
 		{ "type": "IntervalBox", "name": "WarningTimer", "caption": "Warning Timer" }
