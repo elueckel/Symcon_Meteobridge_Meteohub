@@ -12,7 +12,7 @@
 		
 		{ "type": "ValidationTextBox", "name": "Server_Address", "caption": "Server Address" },
 		{ "type": "ValidationTextBox", "name": "User_Name", "caption": "User Name" },
-		{ "type": "ValidationTextBox", "name": "Password", "caption": "Password" },
+		{ "type": "PasswordTextBox", "name": "Password", "caption": "Password" },
 		{ "type": "Label", "label": "Values to be loaded (will create variables)" },
 	   	{ "type": "CheckBox", "name": "Station_ISS", "caption": "Station ISS" },
 		{ "type": "CheckBox", "name": "Temperature_1", "caption": "Temperature Sensor 1" },
