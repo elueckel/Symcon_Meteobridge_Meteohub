@@ -33,7 +33,10 @@ if (!defined('vtBoolean')) {
 			$this->RegisterPropertyBoolean("Rain", 0);
 			$this->RegisterPropertyBoolean("UV", 0);
 			$this->RegisterPropertyBoolean("Solar_Radiation", 0);
-			$this->RegisterPropertyBoolean("Soil_Moisture_1", 0);
+			$this->RegisterPropertyInteger("Soil_Sensor_1", 0);
+			$this->RegisterPropertyInteger("Soil_Sensor_2", 0);
+			$this->RegisterPropertyInteger("Soil_Sensor_3", 0);
+			$this->RegisterPropertyInteger("Soil_Sensor_4", 0);
 			$this->RegisterPropertyBoolean("Leaf_Wetness_1", 0);
 			$this->RegisterPropertyBoolean("Evaporation", 0);
 			$this->RegisterPropertyBoolean("Statistics", 0);
@@ -190,9 +193,15 @@ if (!defined('vtBoolean')) {
 				$this->MaintainVariable('Solar_Radiation', $this->Translate('Solar Radiation'), vtFloat, "MHS.Solarradiation", $vpos++, $this->ReadPropertyBoolean("Solar_Radiation") == 1);
 				//$this->MaintainVariable('Solar_Radiation_LowBat', $this->Translate('Solar Radiation Low Battery'), vtBoolean, "~Battery", $vpos++, $this->ReadPropertyBoolean("Solar_Radiation") == 1);
 				
-				//Soil Moisture and Temperature 1 sensor variables
-				$this->MaintainVariable('Soil_Moisture1', $this->Translate('Soil Moisture 1'), vtInteger, "MHS.SoilMoisture", $vpos++, $this->ReadPropertyBoolean("Soil_Moisture_1") == 1);
-				$this->MaintainVariable('Soil_Temperature1', $this->Translate('Soil Temperature 1'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Soil_Moisture_1") == 1);
+				//Soil Moisture and Temperature sensor variables
+				$this->MaintainVariable('Soil_Moisture1', $this->Translate('Soil Moisture 1'), vtInteger, "MHS.SoilMoisture", $vpos++, $this->ReadPropertyInteger("Soil_Sensor_1") == 1 OR $this->ReadPropertyInteger("Soil_Sensor_1") == 3);
+				$this->MaintainVariable('Soil_Temperature1', $this->Translate('Soil Temperature 1'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyInteger("Soil_Sensor_1") == 2 OR $this->ReadPropertyInteger("Soil_Sensor_1") == 3);
+				$this->MaintainVariable('Soil_Moisture2', $this->Translate('Soil Moisture 2'), vtInteger, "MHS.SoilMoisture", $vpos++, $this->ReadPropertyInteger("Soil_Sensor_2") == 1 OR $this->ReadPropertyInteger("Soil_Sensor_2") == 3);
+				$this->MaintainVariable('Soil_Temperature2', $this->Translate('Soil Temperature 2'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyInteger("Soil_Sensor_2") == 2 OR $this->ReadPropertyInteger("Soil_Sensor_2") == 3);
+				$this->MaintainVariable('Soil_Moisture3', $this->Translate('Soil Moisture 3'), vtInteger, "MHS.SoilMoisture", $vpos++, $this->ReadPropertyInteger("Soil_Sensor_3") == 1 OR $this->ReadPropertyInteger("Soil_Sensor_3") == 3);
+				$this->MaintainVariable('Soil_Temperature3', $this->Translate('Soil Temperature 3'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyInteger("Soil_Sensor_3") == 2 OR $this->ReadPropertyInteger("Soil_Sensor_3") == 3);
+				$this->MaintainVariable('Soil_Moisture4', $this->Translate('Soil Moisture 4'), vtInteger, "MHS.SoilMoisture", $vpos++, $this->ReadPropertyInteger("Soil_Sensor_4") == 1 OR $this->ReadPropertyInteger("Soil_Sensor_4") == 3);
+				$this->MaintainVariable('Soil_Temperature4', $this->Translate('Soil Temperature 4'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyInteger("Soil_Sensor_4") == 2 OR $this->ReadPropertyInteger("Soil_Sensor_4") == 3);
 				//$this->MaintainVariable('Soil_Moisture1_LowBat', $this->Translate('Soil Moisture1 Low Battery'), vtBoolean, "~Battery", $vpos++, $this->ReadPropertyBoolean("Solar_Radiation") == 1);
 								
 				
@@ -359,23 +368,148 @@ if (!defined('vtBoolean')) {
 				//SetValue($this->GetIDForIdent("Solar_Radiation_LowBat"), (bool)$Solar_Radiation_Lowbat);
 			}
 			
-			If ($this->ReadPropertyBoolean("Soil_Moisture_1") == 1)
+			If (($this->ReadPropertyInteger("Soil_Sensor_1") == 1) OR ($this->ReadPropertyInteger("Soil_Sensor_1") == 3))
 			{
-				$Soil_Moisture1_XML = $xml->SOIL;
-				$sourceID = $this->ReadPropertyInteger("SourceID");
 				
-				$Soil_Moisture1 = ($Soil_Moisture1_XML['humidity']);
-				SetValue($this->GetIDForIdent("Soil_Moisture1"), (integer)$Soil_Moisture1);
+				$Server_Address = $this->ReadPropertyString("Server_Address");
+				$User_Name = $this->ReadPropertyString("User_Name");
+				$Password = $this->ReadPropertyString("Password");	
 				
-				$Soil_Temperature1 = ($Soil_Moisture1_XML['temp']);
-				SetValue($this->GetIDForIdent("Soil_Temperature1"), (float)$Soil_Temperature1);
-				
-				//$Soil_Temperature1_Lowbat = (!$Soil_Temperature1_XML['lowbat']);		
-				//SetValue($this->GetIDForIdent("Soil_Temperature1_LowBat"), (bool)$Soil_Temperature1_Lowbat);
-				
+				$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th10hum-act]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Soil_Moisture1 = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Soil_Moisture1"), (float)trim($Soil_Moisture1));
+				curl_close($ch); 
 
 			}
 		
+			If (($this->ReadPropertyInteger("Soil_Sensor_1") == 2) OR ($this->ReadPropertyInteger("Soil_Sensor_1") == 3))
+			{
+				
+				$Server_Address = $this->ReadPropertyString("Server_Address");
+				$User_Name = $this->ReadPropertyString("User_Name");
+				$Password = $this->ReadPropertyString("Password");	
+				
+				$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th10temp-act]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Soil_Temperature1 = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Soil_Temperature1"), (float)trim($Soil_Temperature1));
+				curl_close($ch); 
+
+			}
+			
+			If (($this->ReadPropertyInteger("Soil_Sensor_2") == 1) OR ($this->ReadPropertyInteger("Soil_Sensor_2") == 3))
+			{
+				
+				$Server_Address = $this->ReadPropertyString("Server_Address");
+				$User_Name = $this->ReadPropertyString("User_Name");
+				$Password = $this->ReadPropertyString("Password");	
+				
+				$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th11hum-act]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Soil_Moisture2 = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Soil_Moisture2"), (float)trim($Soil_Moisture2));
+				curl_close($ch); 
+
+			}
+		
+			If (($this->ReadPropertyInteger("Soil_Sensor_2") == 2) OR ($this->ReadPropertyInteger("Soil_Sensor_2") == 3))
+			{
+				
+				$Server_Address = $this->ReadPropertyString("Server_Address");
+				$User_Name = $this->ReadPropertyString("User_Name");
+				$Password = $this->ReadPropertyString("Password");	
+				
+				$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th11temp-act]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Soil_Temperature2 = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Soil_Temperature2"), (float)trim($Soil_Temperature2));
+				curl_close($ch); 
+
+			}
+			
+			If (($this->ReadPropertyInteger("Soil_Sensor_3") == 1) OR ($this->ReadPropertyInteger("Soil_Sensor_3") == 3))
+			{
+				
+				$Server_Address = $this->ReadPropertyString("Server_Address");
+				$User_Name = $this->ReadPropertyString("User_Name");
+				$Password = $this->ReadPropertyString("Password");	
+				
+				$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th12hum-act]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Soil_Moisture3 = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Soil_Moisture3"), (float)trim($Soil_Moisture3));
+				curl_close($ch); 
+
+			}
+		
+			If (($this->ReadPropertyInteger("Soil_Sensor_3") == 2) OR ($this->ReadPropertyInteger("Soil_Sensor_3") == 3))
+			{
+				
+				$Server_Address = $this->ReadPropertyString("Server_Address");
+				$User_Name = $this->ReadPropertyString("User_Name");
+				$Password = $this->ReadPropertyString("Password");	
+				
+				$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th12temp-act]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Soil_Temperature3 = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Soil_Temperature3"), (float)trim($Soil_Temperature3));
+				curl_close($ch); 
+
+			}
+			
+			If (($this->ReadPropertyInteger("Soil_Sensor_4") == 1) OR ($this->ReadPropertyInteger("Soil_Sensor_4") == 3))
+			{
+				
+				$Server_Address = $this->ReadPropertyString("Server_Address");
+				$User_Name = $this->ReadPropertyString("User_Name");
+				$Password = $this->ReadPropertyString("Password");	
+				
+				$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th13hum-act]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Soil_Moisture4 = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Soil_Moisture4"), (float)trim($Soil_Moisture4));
+				curl_close($ch); 
+
+			}
+		
+			If (($this->ReadPropertyInteger("Soil_Sensor_4") == 2) OR ($this->ReadPropertyInteger("Soil_Sensor_4") == 3))
+			{
+				
+				$Server_Address = $this->ReadPropertyString("Server_Address");
+				$User_Name = $this->ReadPropertyString("User_Name");
+				$Password = $this->ReadPropertyString("Password");	
+				
+				$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th13temp-act]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$Soil_Temperature4 = curl_exec($ch);
+				SetValue($this->GetIDForIdent("Soil_Temperature4"), (float)trim($Soil_Temperature4));
+				curl_close($ch); 
+
+			}
+		
+			
+			If ($this->ReadPropertyBoolean("Leaf_Wetness_1") == 1)
+			{
+				$Leaf_Wetness1_XML = $xml->LEAF;
+				$sourceID = $this->ReadPropertyInteger("SourceID");
+				
+				$Leaf_Wetness1 = ($Leaf_Wetness1_XML['humidity']);
+				SetValue($this->GetIDForIdent("Leaf_Wetness1"), (float)$Leaf_Wetness1);
+				
+				//$Leaf_Wetness1 = (!$Leaf_Wetness1_XML['lowbat']);		
+				//SetValue($this->GetIDForIdent("Leaf_Wetness1_LowBat"), (bool)$Leaf_Wetness1_Lowbat);
+			
+					
+			}
 			
 			If ($this->ReadPropertyBoolean("Leaf_Wetness_1") == 1)
 			{
