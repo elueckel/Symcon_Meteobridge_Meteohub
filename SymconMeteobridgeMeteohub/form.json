@@ -12,7 +12,7 @@
 		
 		{ "type": "ValidationTextBox", "name": "Server_Address", "caption": "Server Address" },
 		{ "type": "ValidationTextBox", "name": "User_Name", "caption": "User Name" },
-		{ "type": "ValidationTextBox", "name": "Password", "caption": "Password" },
+		{ "type": "PasswordTextBox", "name": "Password", "caption": "Password" },
 		{ "type": "Label", "label": "Values to be loaded (will create variables)" },
 	   	{ "type": "CheckBox", "name": "Station_ISS", "caption": "Station ISS" },
 		{ "type": "CheckBox", "name": "Temperature_1", "caption": "Temperature Sensor 1" },
@@ -20,8 +20,39 @@
 		{ "type": "CheckBox", "name": "UV", "caption": "UV" },
 		{ "type": "CheckBox", "name": "Solar_Radiation", "caption": "Solar Radiation"},
 		{ "type": "CheckBox", "name": "Wind", "caption": "Wind" },
-		{ "type": "Label", "label": "Turf Sensors (untested)" },
-		{ "type": "CheckBox", "name": "Soil_Moisture_1", "caption": "Soil Moisture and Temperature 1" },
+		{ "type": "Label", "label": "Turf Sensors (untested)" },		
+		{ "name": "Soil_Sensor_1", "type": "Select", "caption": "Soil Sensor 1",
+		"options": [
+			{ "label": "Off", "value": "0" },
+			{ "label": "Humidity", "value": "1" },
+			{ "label": "Temparature", "value": "2" },
+			{ "label": "Hum + Temp", "value": "3" }
+			]
+		},
+		{ "name": "Soil_Sensor_2", "type": "Select", "caption": "Soil Sensor 2",
+		"options": [
+			{ "label": "Off", "value": "0" },
+			{ "label": "Humidity", "value": "1" },
+			{ "label": "Temparature", "value": "2" },
+			{ "label": "Hum + Temp", "value": "3" }
+			]
+		},
+		{ "name": "Soil_Sensor_3", "type": "Select", "caption": "Soil Sensor 3",
+		"options": [
+			{ "label": "Off", "value": "0" },
+			{ "label": "Humidity", "value": "1" },
+			{ "label": "Temparature", "value": "2" },
+			{ "label": "Hum + Temp", "value": "3" }
+			]
+		},
+		{ "name": "Soil_Sensor_4", "type": "Select", "caption": "Soil Sensor 4",
+		"options": [
+			{ "label": "Off", "value": "0" },
+			{ "label": "Humidity", "value": "1" },
+			{ "label": "Temparature", "value": "2" },
+			{ "label": "Hum + Temp", "value": "3" }
+			]
+		},
 		{ "type": "CheckBox", "name": "Leaf_Wetness_1", "caption": "Leaf Wetness 1" },
 		{ "type": "CheckBox", "name": "Evaporation", "caption": "Evaporation (Vantage PWS only)" },
 		{ "type": "Label", "label": "Statistics and Forecast (requires Meteobridge)" },
@@ -38,5 +69,13 @@
 		{ "type": "Label", "label": "Update Timer (0 = off)" },
 		{ "type": "IntervalBox", "name": "Timer", "caption": "Standard Timer" },
 		{ "type": "IntervalBox", "name": "WarningTimer", "caption": "Warning Timer" }
-    ]
+    ],
+
+	"actions":
+	[
+		{ "type": "Button", "label": "Test Standard Data", "onClick": "MHS_SyncStation($id);" },
+		{ "type": "Button", "label": "Test Warning Data", "onClick": "MHS_WeatherWarning($id);" },
+		{ "type": "Button", "label": "Test Statistics Data", "onClick": "MHS_Statistics($id);" }
+	]
+	
 }

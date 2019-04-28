@@ -54,6 +54,9 @@ Daten Hier können die Sensoren ausgewählt werden.
   - Die Tageswerte, werden via Timer einmal täglich um 23.58 ausgelesen.
   - Statistikfunktion legt eine Menge an Variablen an - aktuell nicht konfigurierbar (die UI wird sonst überladen)
   - Die Tagesstatistiken können via Symcon Charts etc einfach ausgewertet werden (ich habe bewusst auf Monats, Jahres etc. Auswertungen verzichtet)
+  
+### Version 3.1 xx/xx/2010
+- Fix Passwort ist nun in Passwort Feld versteckt
 
 ## Wo finde ich Informationen ob das Modul funktioniert
 Das Modul postet Informationen ins Log (Stand V2.0). 
