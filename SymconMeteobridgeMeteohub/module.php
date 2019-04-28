@@ -54,6 +54,7 @@ if (!defined('vtBoolean')) {
 			//Component sets timer, but default is OFF
 			$this->RegisterTimer("UpdateTimer",0,"MHS_SyncStation(\$_IPS['TARGET']);");
 			$this->RegisterTimer("WarningTimer",0,"MHS_WeatherWarning(\$_IPS['TARGET']);");
+			$this->RegisterTimer("StatisticsTimer",0,"MHS_StatisticsTimer(\$_IPS['TARGET']);");
 			
 	
 		}
@@ -81,7 +82,12 @@ if (!defined('vtBoolean')) {
 				//Statics Timer Creation - On - Off
 				
 				$sourceID = $this->ReadPropertyInteger("SourceID");
-		
+				
+				// Test Interner Timer
+				
+				$this->SetCyclicTimerInterval();
+				
+				/*
 				$eid = @IPS_GetObjectIDByIdent("WeatherStatistics", $this->InstanceID);
 				if ($eid == 0) {
 					$eid = IPS_CreateEvent(1);
@@ -94,6 +100,8 @@ if (!defined('vtBoolean')) {
 					IPS_SetEventScript($eid, 'MHS_Statistics($_IPS[\'TARGET\'], "Up");');
 				}
 				
+				
+				
 				If ($this->ReadPropertyBoolean("Statistics") == 1)
 				{
 					$eid = @IPS_GetObjectIDByIdent("WeatherStatistics", $this->InstanceID);
@@ -105,7 +113,7 @@ if (!defined('vtBoolean')) {
 					$eid = @IPS_GetObjectIDByIdent("WeatherStatistics", $this->InstanceID);
 					IPS_SetEventActive($eid, false);
 				}
-				
+				*/
 				
 				//Creation of Custom Variables
 								
@@ -224,6 +232,18 @@ if (!defined('vtBoolean')) {
 				
 		}
 	
+		protected function SetCyclicTimerInterval()
+		{
+			$Now = new DateTime();
+			$Target = new DateTime();
+			$Target->modify('+1 day');
+			$Target->setTime(23, 58, 0);
+			$Diff = $Target->getTimestamp() - $Now->getTimestamp();
+			$Interval = $Diff * 1000;
+			$this->SetTimerInterval("StatisticsTimer", $Interval);
+		}
+		
+		
 		
 		//Fetch data from Station
 		
@@ -606,7 +626,10 @@ if (!defined('vtBoolean')) {
 		
 		public function Statistics()
 		{
-			
+		
+			If ($this->ReadPropertyBoolean("Statistics") == 1)
+			{
+					
 			//Create Statics Variables 
 			
 			$vpos = 50;
@@ -749,9 +772,20 @@ if (!defined('vtBoolean')) {
 				curl_close($ch);
 
 			
+			}
+			
+			
+			If ($this->ReadPropertyBoolean("Statistics") == 0)
+			{
+				// Statistics not active
+			}
+				
+				
+			
 		}
 		
 		
 	}
+
 	
 ?>
