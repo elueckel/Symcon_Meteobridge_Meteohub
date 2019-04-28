@@ -58,6 +58,7 @@ Daten Hier können die Sensoren ausgewählt werden.
 ### Version 3.1 28/04/2019
 * Fix Passwort ist nun in Passwort Feld versteckt
 * Bodenfeuchte / Temperatursensoren sind nun vollständig eingebunden
+* Timer für Statistik ist jetzt intern
 
 ## Wo finde ich Informationen ob das Modul funktioniert
 Das Modul postet Informationen ins Log (Stand V2.0). 
