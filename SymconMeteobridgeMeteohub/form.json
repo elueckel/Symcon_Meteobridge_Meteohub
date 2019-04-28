@@ -20,7 +20,7 @@
 		{ "type": "CheckBox", "name": "UV", "caption": "UV" },
 		{ "type": "CheckBox", "name": "Solar_Radiation", "caption": "Solar Radiation"},
 		{ "type": "CheckBox", "name": "Wind", "caption": "Wind" },
-		{ "type": "Label", "label": "Turf Sensors (untested)" },		
+		{ "type": "Label", "label": "Turf Sensors" },		
 		{ "name": "Soil_Sensor_1", "type": "Select", "caption": "Soil Sensor 1",
 		"options": [
 			{ "label": "Off", "value": "0" },
