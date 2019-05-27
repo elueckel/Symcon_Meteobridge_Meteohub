@@ -501,7 +501,7 @@ if (!defined('vtBoolean')) {
 			{
 					
 				$ch = curl_init(); 
-				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?[th16hum-act]');
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th16hum-act]');
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				$leaf = curl_exec($ch);
 				$this->SendDebug('Result', $leaf,0);
