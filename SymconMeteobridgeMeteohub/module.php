@@ -499,18 +499,22 @@ if (!defined('vtBoolean')) {
 			
 			If ($this->ReadPropertyBoolean("Leaf_Wetness_1") == 1)
 			{
-				$Leaf_Wetness1_XML = $xml->LEAF;
-				$sourceID = $this->ReadPropertyInteger("SourceID");
-				
-				$Leaf_Wetness1 = ($Leaf_Wetness1_XML['humidity']);
-				SetValue($this->GetIDForIdent("Leaf_Wetness1"), (float)$Leaf_Wetness1);
+					
+				$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?[th16hum-act]');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$leaf = curl_exec($ch);
+				$this->SendDebug('Result', $leaf,0);
+				$this->SendDebug('Result trim', trim($leaf),0);
+				SetValue($this->GetIDForIdent("Lead_Wetness1"), (float)trim($leaf));
+				curl_close($ch);  
 				
 				//$Leaf_Wetness1 = (!$Leaf_Wetness1_XML['lowbat']);		
 				//SetValue($this->GetIDForIdent("Leaf_Wetness1_LowBat"), (bool)$Leaf_Wetness1_Lowbat);
 			
 					
 			}
-			
+			/*
 			If ($this->ReadPropertyBoolean("Leaf_Wetness_1") == 1)
 			{
 				$Leaf_Wetness1_XML = $xml->LEAF;
@@ -524,7 +528,7 @@ if (!defined('vtBoolean')) {
 			
 					
 			}
-			
+			*/
 			
 			If ($this->ReadPropertyBoolean("Evaporation") == 1)
 			{
