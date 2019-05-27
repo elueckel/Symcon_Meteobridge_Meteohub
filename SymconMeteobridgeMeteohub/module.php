@@ -506,7 +506,7 @@ if (!defined('vtBoolean')) {
 				$leaf = curl_exec($ch);
 				$this->SendDebug('Result', $leaf,0);
 				$this->SendDebug('Result trim', trim($leaf),0);
-				SetValue($this->GetIDForIdent("Lead_Wetness1"), (float)trim($leaf));
+				SetValue($this->GetIDForIdent("Leaf_Wetness1"), (float)trim($leaf));
 				curl_close($ch);  
 				
 				//$Leaf_Wetness1 = (!$Leaf_Wetness1_XML['lowbat']);		
