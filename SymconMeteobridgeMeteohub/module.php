@@ -54,8 +54,8 @@ if (!defined('vtBoolean')) {
 			//Component sets timer, but default is OFF
 			$this->RegisterTimer("UpdateTimer",0,"MHS_SyncStation(\$_IPS['TARGET']);");
 			$this->RegisterTimer("WarningTimer",0,"MHS_WeatherWarning(\$_IPS['TARGET']);");
-			//$this->RegisterTimer("StatisticsTimer",0,"MHS_StatisticsTimer(\$_IPS['TARGET']);");
-      $this->RegisterCyclicTimer('StatisticsTimer', 23, 58, 0, "MHS_StatisticsTimer(\$_IPS['TARGET']);", false);
+			$this->RegisterTimer("StatisticsTimer",0,"MHS_StatisticsTimer(\$_IPS['TARGET']);");
+
 
 
 		}
@@ -232,19 +232,19 @@ if (!defined('vtBoolean')) {
 
 
 		}
-	/*
+
 		protected function SetCyclicTimerInterval()
 		{
 			$Now = new DateTime();
 			$Target = new DateTime();
 			$Target->modify('+1 day');
-			$Target->setTime(23, 58, 0);
+			$Target->setTime(10, 25, 0);
 			$Diff = $Target->getTimestamp() - $Now->getTimestamp();
 			$Interval = $Diff * 1000;
 			$this->SetTimerInterval("StatisticsTimer", $Interval);
 		}
 
-*/
+
 
 		//Fetch data from Station
 
