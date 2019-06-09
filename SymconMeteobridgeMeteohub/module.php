@@ -42,8 +42,8 @@ if (!defined('vtBoolean')) {
 			$this->RegisterPropertyBoolean("Statistics", 0);
 			$this->RegisterPropertyString("Forecast", "F_OFF");
 			$this->RegisterPropertyBoolean("Wind", 0);
-      $this->RegisterPropertyInteger("WebFrontInstanceID", 0);
-      $this->RegisterPropertyBoolean("PushMsgAktiv", false);
+      //$this->RegisterPropertyInteger("WebFrontInstanceID", 0);
+      //$this->RegisterPropertyBoolean("PushMsgAktiv", false);
 			$this->RegisterPropertyInteger("Timer", 0);
 			$this->RegisterPropertyInteger("WarningTimer", 0);
 			$this->RegisterPropertyBoolean("Debug", 0);
@@ -265,7 +265,7 @@ if (!defined('vtBoolean')) {
         else
         {
   				  SetValue($this->GetIDForIdent("Station_Error"), 1);
-            WFC_PushNotification(ReadPropertyInteger(WebFrontInstanceID), 'Meteobridge nicht erreichbar', 'Batterie leer, WLAN weg', '', 0);
+            //WFC_PushNotification(ReadPropertyInteger(WebFrontInstanceID), 'Meteobridge nicht erreichbar', 'Batterie leer, WLAN weg', '', 0);
         }
 
 

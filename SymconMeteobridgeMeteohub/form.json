@@ -66,10 +66,6 @@
 			]
 		},
 
-    { "type": "SelectInstance", "name": "WebFrontInstanceID", "caption": "WebFront-Instanz" },
-    { "type": "CheckBox", "name": "PushMsgAktiv", "caption": "Push-Benachrichtigung" },
-
-
 		{ "type": "Label", "label": "Update Timer (0 = off)" },
 		{ "type": "IntervalBox", "name": "Timer", "caption": "Standard Timer" },
 		{ "type": "IntervalBox", "name": "WarningTimer", "caption": "Warning Timer" }
