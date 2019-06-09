@@ -162,6 +162,7 @@ if (!defined('vtBoolean')) {
 				$this->MaintainVariable('Station_AirPressure', $this->Translate('Station Air Pressure'), vtInteger, "~AirPressure", $vpos++, $this->ReadPropertyBoolean("Station_ISS") == 1);
 				$this->MaintainVariable('Station_SeaPressure', $this->Translate('Station Sealevel Air Pressure'), vtInteger, "~AirPressure", $vpos++, $this->ReadPropertyBoolean("Station_ISS") == 1);
 				$this->MaintainVariable('Station_LowBat', $this->Translate('Station Low Battery'), vtBoolean, "~Battery", $vpos++, $this->ReadPropertyBoolean("Station_ISS") == 1);
+        	$this->MaintainVariable('Station_Error', $this->Translate('Station Error'), vtBoolean, "", $vpos++, $this->ReadPropertyBoolean("Station_ISS") == 1);
 
 				//Temperature sensor 1 variables
 				$this->MaintainVariable('Sensor1_Temperature', $this->Translate('Sensor 1 Temperature'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Temperature_1") == 1);
@@ -257,7 +258,13 @@ if (!defined('vtBoolean')) {
 				{
             $THB_Temp = ($THB_XML['temp']);
     				SetValue($this->GetIDForIdent("Station_Temperature"), (float)$THB_Temp);
+            SetValue($this->GetIDForIdent("Station_Error"), 0);
 				}
+        else
+        {
+  				  SetValue($this->GetIDForIdent("Station_Error"), 1);
+        }
+
 
         if (isset($THB_XML['hum']))
 				{
