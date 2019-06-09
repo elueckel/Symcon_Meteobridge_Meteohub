@@ -259,43 +259,68 @@ if (!defined('vtBoolean')) {
     				SetValue($this->GetIDForIdent("Station_Temperature"), (float)$THB_Temp);
 				}
 
-				//$THB_Temp = ($THB_XML['temp']);
-				//SetValue($this->GetIDForIdent("Station_Temperature"), (float)$THB_Temp);
+        if (isset($THB_XML['hum']))
+				{
+          $THB_Hum = ($THB_XML['hum']);
+          SetValue($this->GetIDForIdent("Station_Humidity"), (integer)$THB_Hum);
+				}
 
-				$THB_Hum = ($THB_XML['hum']);
-				SetValue($this->GetIDForIdent("Station_Humidity"), (integer)$THB_Hum);
+        if (isset($THB_XML['dew']))
+				{
+          $THB_Dew = ($THB_XML['dew']);
+  				SetValue($this->GetIDForIdent("Station_Dewpoint"), (float)$THB_Dew);
+				}
 
-				$THB_Dew = ($THB_XML['dew']);
-				SetValue($this->GetIDForIdent("Station_Dewpoint"), (float)$THB_Dew);
+        if (isset($THB_XML['press']))
+				{
+          $THB_Pressure = ($THB_XML['press']);
+  				SetValue($this->GetIDForIdent("Station_AirPressure"), (integer)$THB_Pressure);
+				}
 
-				$THB_Pressure = ($THB_XML['press']);
-				SetValue($this->GetIDForIdent("Station_AirPressure"), (integer)$THB_Pressure);
+        if (isset($THB_XML['seapress']))
+				{
+          $THB_SeaPressure = ($THB_XML['seapress']);
+  				SetValue($this->GetIDForIdent("Station_SeaPressure"), (integer)$THB_SeaPressure);
+				}
 
-				$THB_SeaPressure = ($THB_XML['seapress']);
-				SetValue($this->GetIDForIdent("Station_SeaPressure"), (integer)$THB_SeaPressure);
-
-				$THB_Lowbat = (!$THB_XML['lowbat']);
-				SetValue($this->GetIDForIdent("Station_LowBat"), (bool)$THB_Lowbat);
+        if (isset($THB_XML['lowbat']))
+				{
+          $THB_Lowbat = (!$THB_XML['lowbat']);
+  				SetValue($this->GetIDForIdent("Station_LowBat"), (bool)$THB_Lowbat);
+				}
 
 			}
 
 
 			If ($this->ReadPropertyBoolean("Temperature_1") == 1)
 			{
-				$TH_XML = $xml->TH;
+
+        $TH_XML = $xml->TH;
 				$sourceID = $this->ReadPropertyInteger("SourceID");
 
-				$TH_Temp = ($TH_XML['temp']);
-				SetValue($this->GetIDForIdent("Sensor1_Temperature"), (float)$TH_Temp);
+        if (isset($TH_XML['temp']))
+				{
+          $TH_Temp = ($TH_XML['temp']);
+  				SetValue($this->GetIDForIdent("Sensor1_Temperature"), (float)$TH_Temp);
+				}
 
-				$TH_Hum = ($TH_XML['hum']);
-				SetValue($this->GetIDForIdent("Sensor1_Humidity"), (float)$TH_Hum);
+        if (isset($TH_XML['hum']))
+				{
+          $TH_Hum = ($TH_XML['hum']);
+  				SetValue($this->GetIDForIdent("Sensor1_Humidity"), (float)$TH_Hum);
+				}
 
-				$TH_Dew = ($TH_XML['dew']);
-				SetValue($this->GetIDForIdent("Sensor1_Dewpoint"), (float)$TH_Dew);
+        if (isset($TH_XML['dew']))
+				{
+          $TH_Dew = ($TH_XML['dew']);
+  				SetValue($this->GetIDForIdent("Sensor1_Dewpoint"), (float)$TH_Dew);
+				}
 
-				$TH_Lowbat = (!$TH_XML['lowbat']);
-				SetValue($this->GetIDForIdent("Sensor1_LowBat"), (bool)$TH_Lowbat);
+        if (isset($TH_XML['lowbat']))
+				{
+          $TH_Lowbat = (!$TH_XML['lowbat']);
+  				SetValue($this->GetIDForIdent("Sensor1_LowBat"), (bool)$TH_Lowbat);
+				}
 
 			}
 
@@ -305,26 +330,47 @@ if (!defined('vtBoolean')) {
 				$Wind_XML = $xml->WIND;
 				$sourceID = $this->ReadPropertyInteger("SourceID");
 
-				$Wind_Dir = ($Wind_XML['dir']);
-				SetValue($this->GetIDForIdent("Wind_Direction"), (float)$Wind_Dir);
+        if (isset($Wind_XML['dir']))
+				{
+          $Wind_Dir = ($Wind_XML['dir']);
+  				SetValue($this->GetIDForIdent("Wind_Direction"), (float)$Wind_Dir);
+				}
 
-				$Wind_Dir = ($Wind_XML['dir']);
-				SetValue($this->GetIDForIdent("Wind_Direction_Text"), (float)$Wind_Dir);
+        if (isset($Wind_XML['dir']))
+				{
+          $Wind_Dir = ($Wind_XML['dir']);
+  				SetValue($this->GetIDForIdent("Wind_Direction_Text"), (float)$Wind_Dir);
+				}
 
-				$Wind_Gust = ($Wind_XML['gust']);
-				SetValue($this->GetIDForIdent("Wind_Gust"), (float)$Wind_Gust);
+        if (isset($Wind_XML['gust']))
+				{
+          $Wind_Gust = ($Wind_XML['gust']);
+  				SetValue($this->GetIDForIdent("Wind_Gust"), (float)$Wind_Gust);
+				}
 
-				$Wind_Speed = ($Wind_XML['wind']);
-				SetValue($this->GetIDForIdent("Wind_Speed"), (float)$Wind_Speed);
+        if (isset($Wind_XML['wind']))
+				{
+          $Wind_Speed = ($Wind_XML['wind']);
+  				SetValue($this->GetIDForIdent("Wind_Speed"), (float)$Wind_Speed);
+				}
 
-				$Wind_Speed = ($Wind_XML['wind']);
-				SetValue($this->GetIDForIdent("Wind_Speed_Text"), (float)$Wind_Speed);
+        if (isset($Wind_XML['wind']))
+				{
+          $Wind_Speed = ($Wind_XML['wind']);
+  				SetValue($this->GetIDForIdent("Wind_Speed_Text"), (float)$Wind_Speed);
+				}
 
-				$Wind_Chill = ($Wind_XML['chill']);
-				SetValue($this->GetIDForIdent("Wind_Chill"), (float)$Wind_Chill);
+        if (isset($Wind_XML['chill']))
+				{
+          $Wind_Chill = ($Wind_XML['chill']);
+  				SetValue($this->GetIDForIdent("Wind_Chill"), (float)$Wind_Chill);
+				}
 
-				$Wind_Lowbat = (!$Wind_XML['lowbat']);
-				SetValue($this->GetIDForIdent("Wind_LowBat"), (bool)$Wind_Lowbat);
+        if (isset($Wind_XML['lowbat']))
+				{
+          $Wind_Lowbat = (!$Wind_XML['lowbat']);
+  				SetValue($this->GetIDForIdent("Wind_LowBat"), (bool)$Wind_Lowbat);
+				}
 
 			}
 
@@ -334,17 +380,23 @@ if (!defined('vtBoolean')) {
 				$Rain_XML = $xml->RAIN;
 				$sourceID = $this->ReadPropertyInteger("SourceID");
 
-				$Rain_Rate = ($Rain_XML['rate']);
-				SetValue($this->GetIDForIdent("Rain_Rate"), (float)$Rain_Rate);
+        if (isset($Rain_XML['rate']))
+				{
+          $Rain_Rate = ($Rain_XML['rate']);
+  				SetValue($this->GetIDForIdent("Rain_Rate"), (float)$Rain_Rate);
+				}
 
-				$Rain_Total = ($Rain_XML['total']);
-				SetValue($this->GetIDForIdent("Rain_Total"), (float)$Rain_Total);
+        if (isset($Rain_XML['total']))
+				{
+          $Rain_Total = ($Rain_XML['total']);
+  				SetValue($this->GetIDForIdent("Rain_Total"), (float)$Rain_Total);
+				}
 
-				$Rain_Delta = ($Rain_XML['delta']);
-				SetValue($this->GetIDForIdent("Rain_Delta"), (float)$Rain_Delta);
-
-				//$Rain_Lowbat = (!$Rain_XML['lowbat']);
-				//SetValue($this->GetIDForIdent("Rain_LowBat"), (bool)$Rain_Lowbat);
+        if (isset($Rain_XML['delta']))
+				{
+          $Rain_Delta = ($Rain_XML['delta']);
+  				SetValue($this->GetIDForIdent("Rain_Delta"), (float)$Rain_Delta);
+				}
 
 			}
 
@@ -354,8 +406,11 @@ if (!defined('vtBoolean')) {
 				$UV_XML = $xml->UV;
 				$sourceID = $this->ReadPropertyInteger("SourceID");
 
-				$UV_Index = ($UV_XML['index']);
-				SetValue($this->GetIDForIdent("UV_Index"), (integer)$UV_Index);
+        if (isset($UV_XML['index']))
+				{
+          $UV_Index = ($UV_XML['index']);
+  				SetValue($this->GetIDForIdent("UV_Index"), (integer)$UV_Index);
+				}
 
 				//$UV_Lowbat = (!$UV_XML['lowbat']);
 				//SetValue($this->GetIDForIdent("UV_LowBat"), (bool)$UV_Lowbat);
@@ -367,8 +422,11 @@ if (!defined('vtBoolean')) {
 				$Solar_Radiation_XML = $xml->SOL;
 				$sourceID = $this->ReadPropertyInteger("SourceID");
 
-				$Solar_Radiation = ($Solar_Radiation_XML['rad']);
-				SetValue($this->GetIDForIdent("Solar_Radiation"), (integer)$Solar_Radiation);
+        if (isset($Solar_Radiation_XML['rad']))
+				{
+          $Solar_Radiation = ($Solar_Radiation_XML['rad']);
+  				SetValue($this->GetIDForIdent("Solar_Radiation"), (integer)$Solar_Radiation);
+				}
 
 				//$Solar_Radiation_Lowbat = (!$Solar_Radiation_XML['lowbat']);
 				//SetValue($this->GetIDForIdent("Solar_Radiation_LowBat"), (bool)$Solar_Radiation_Lowbat);
@@ -573,9 +631,6 @@ if (!defined('vtBoolean')) {
 				//do nothing
 			}
 
-
-
-
 		}
 
 		// Section run on a second more frequent timer intended for weather warnings
@@ -606,11 +661,17 @@ if (!defined('vtBoolean')) {
 			$Wind_XML = $xml->WIND;
 			$sourceID = $this->ReadPropertyInteger("SourceID");
 
-			$Wind_Gust = ($Wind_XML['gust']);
-			SetValue($this->GetIDForIdent("Warning_Wind_Gust"), (float)$Wind_Gust);
+      if (isset($Wind_XML['gust']))
+      {
+        $Wind_Gust = ($Wind_XML['gust']);
+  			SetValue($this->GetIDForIdent("Warning_Wind_Gust"), (float)$Wind_Gust);
+      }
 
-			$Wind_Speed = ($Wind_XML['wind']);
-			SetValue($this->GetIDForIdent("Warning_Wind_Speed"), (float)$Wind_Speed);
+      if (isset($Wind_XML['wind']))
+      {
+        $Wind_Speed = ($Wind_XML['wind']);
+  			SetValue($this->GetIDForIdent("Warning_Wind_Speed"), (float)$Wind_Speed);
+      }
 
 		}
 
