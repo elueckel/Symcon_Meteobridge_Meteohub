@@ -253,7 +253,7 @@ if (!defined('vtBoolean')) {
 				$THB_XML = $xml->THB;
 				$sourceID = $this->ReadPropertyInteger("SourceID");
 
-        if (isset($THB_XML['temp'])
+        if (isset($THB_XML['temp']))
 				{
             $THB_Temp = ($THB_XML['temp']);
     				SetValue($this->GetIDForIdent("Station_Temperature"), (float)$THB_Temp);
