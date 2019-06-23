@@ -54,10 +54,14 @@ Daten Hier können die Sensoren ausgewählt werden.
 * Die Tageswerte, werden via Timer einmal täglich um 23.58 ausgelesen.
 * Statistikfunktion legt eine Menge an Variablen an - aktuell nicht konfigurierbar (die UI wird sonst überladen)
 * Die Tagesstatistiken können via Symcon Charts etc einfach ausgewertet werden (ich habe bewusst auf Monats, Jahres etc. Auswertungen verzichtet)
-  
+
 ### Version 3.1 28/04/2019
 * Fix Passwort ist nun in Passwort Feld versteckt
 * Bodenfeuchte / Temperatursensoren sind nun vollständig eingebunden
 
+### Version 3.2 09/06/2019
+* Fix Blattfeuchte Sensor
+* Fix Komponente behält nun die alten Werte bei, falls die Meteobridge/Meteohub mal nicht erreichbar ist und setzt eine neue Error Variable auf welche man einen Trigger z.B. für den Versand einer Email setzen kann. 
+
 ## Wo finde ich Informationen ob das Modul funktioniert
-Das Modul postet Informationen ins Log (Stand V2.0). 
+Das Modul postet Informationen ins Log (Stand V2.0).
