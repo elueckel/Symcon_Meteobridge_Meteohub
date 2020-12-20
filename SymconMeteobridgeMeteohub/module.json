@@ -2,10 +2,10 @@
     "id": "{24A6FC41-748D-4843-BEF9-0606DBB95CD3}",
     "name": "Symcon_Meteobridge_Meteohub",
     "type": 3,
-    "vendor": "(Sonstige)",
+    "vendor": "elueckel",
     "aliases": 
     [
-        "Symcon_Meteobridge_Meteohub"
+        "Meteobridge & MeteoHub"
     ],
     "parentRequirements": [],
     "childRequirements": [],

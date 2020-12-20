@@ -1,81 +1,290 @@
 {
     "elements":
     [
-        { "type": "Label", "label": "Connection Data" },
-
-		{ "name": "WeatherServer", "type": "Select", "caption": "Weather Server",
-		"options": [
-			{ "label": "Meteobridge", "value": "B" },
-			{ "label": "Meteohub", "value": "H" }
+		{
+			"type": "Label",
+			"label": "This module was build and tested for integrating DAVIS Weather Stations, but may work with others."
+		},
+		{
+			"type": "Label",
+			"label": ""
+		},
+		{
+			"type": "Label",
+			"label": "Connection Data to Meteobridge/Meteohub"
+		},
+		{
+			"name": "WeatherServer",
+			"type": "Select",
+			"caption": "Type of Weather Server",
+			"options": [
+				{ "label": "Meteobridge", "value": "B" },
+				{ "label": "Meteohub", "value": "H" }
 			]
 		},
-
-		{ "type": "ValidationTextBox", "name": "Server_Address", "caption": "Server Address" },
-		{ "type": "ValidationTextBox", "name": "User_Name", "caption": "User Name" },
-		{ "type": "PasswordTextBox", "name": "Password", "caption": "Password" },
-		{ "type": "Label", "label": "Values to be loaded (will create variables)" },
-	   	{ "type": "CheckBox", "name": "Station_ISS", "caption": "Station ISS" },
-		{ "type": "CheckBox", "name": "Temperature_1", "caption": "Temperature Sensor 1" },
-	    	{ "type": "CheckBox", "name": "Rain", "caption": "Rain" },
-		{ "type": "CheckBox", "name": "UV", "caption": "UV" },
-		{ "type": "CheckBox", "name": "Solar_Radiation", "caption": "Solar Radiation"},
-		{ "type": "CheckBox", "name": "Wind", "caption": "Wind" },
-		{ "type": "Label", "label": "Turf Sensors" },
-		{ "name": "Soil_Sensor_1", "type": "Select", "caption": "Soil Sensor 1",
-		"options": [
-			{ "label": "Off", "value": "0" },
-			{ "label": "Humidity", "value": "1" },
-			{ "label": "Temparature", "value": "2" },
-			{ "label": "Hum + Temp", "value": "3" }
+		{
+			"type": "RowLayout",
+			"items": [
+				{
+					"type": "ValidationTextBox",
+					"name": "Server_Address",
+					"caption": "Server Address (IP)"
+				},
+				{
+					"type": "ValidationTextBox",
+					"name": "User_Name",
+					"caption": "User Name"
+				},
+				{
+					"type": "PasswordTextBox",
+					"name": "Password",
+					"caption": "Password"
+				}
 			]
 		},
-		{ "name": "Soil_Sensor_2", "type": "Select", "caption": "Soil Sensor 2",
-		"options": [
-			{ "label": "Off", "value": "0" },
-			{ "label": "Humidity", "value": "1" },
-			{ "label": "Temparature", "value": "2" },
-			{ "label": "Hum + Temp", "value": "3" }
+		{
+			"type": "Label",
+			"label": ""
+		},
+		{
+			"type": "Label",
+			"label": "Basic Sensor Data"
+		},
+		{
+		"type": "CheckBox",
+		"name": "Station_ISS",
+		"caption": "Station ISS - Indor Central Unit"
+		},
+		{
+		"type": "CheckBox",
+		"name": "Wind",
+		"caption": "Wind Sensors (Wind/Gusts)"
+		},
+		{
+			"type": "CheckBox",
+			"name": "Temperature_1",
+			"caption": "Temperature Sensor 1"
+		},
+		{
+			"type": "CheckBox",
+			"name": "Rain",
+			"caption": "Rain (Amount/Intensity)"
+		},
+		{
+			"name": "Forecast",
+			"type": "Select",
+			"caption": "Local Forecast provided by DAVIS Weather Station",
+			"options": [
+				{
+					"label": "Off",
+					"value": "F_OFF"
+				},
+				{
+					"label": "German",
+					"value": "F_DE"
+				},
+				{
+					"label": "English",
+					"value": "F_EN"
+				}
 			]
 		},
-		{ "name": "Soil_Sensor_3", "type": "Select", "caption": "Soil Sensor 3",
-		"options": [
-			{ "label": "Off", "value": "0" },
-			{ "label": "Humidity", "value": "1" },
-			{ "label": "Temparature", "value": "2" },
-			{ "label": "Hum + Temp", "value": "3" }
+		{
+			"type": "Label",
+			"label": ""
+		},
+		{
+			"type": "Label",
+			"label": "Advanced Sensor Data"
+		},
+		{
+			"type": "RowLayout",
+			"items": [
+				{
+					"type": "CheckBox",
+					"name": "UV",
+					"caption": "UV Index"
+				},
+				{
+					"type": "CheckBox",
+					"name": "Solar_Radiation",
+					"caption": "Solar Radiation"
+				}
 			]
 		},
-		{ "name": "Soil_Sensor_4", "type": "Select", "caption": "Soil Sensor 4",
-		"options": [
-			{ "label": "Off", "value": "0" },
-			{ "label": "Humidity", "value": "1" },
-			{ "label": "Temparature", "value": "2" },
-			{ "label": "Hum + Temp", "value": "3" }
+		{
+			"type": "Label",
+			"label": ""
+		},
+		{
+			"type": "Label",
+			"label": "Update Timer (0 = off)"
+		},
+		{
+			"type": "NumberSpinner",
+			"name": "Timer",
+			"caption": "Standard Timer",
+			"minimum": "0",
+			"suffix": "seconds"
+		},
+		{
+			"type": "Label",
+			"label": "\n The Warning Timer will created seperate variables for Wind & Gusts which can be used to retract a Marquese during storm."
+		},
+		{
+			"type": "NumberSpinner",
+			"name": "WarningTimer",
+			"caption": "Warning Timer",
+			"minimum": "0",
+			"suffix": "seconds"
+		},
+		{
+			"type": "ExpansionPanel",
+			"caption": "Turf sensors via DAVIS Soil Sensor Unit 6345 OV",
+			"items": [
+				{
+					"name": "Soil_Sensor_1",
+					"type": "Select",
+					"caption": "Soil Sensor 1",
+					"options": [
+						{
+							"label": "Off",
+							"value": 0
+						},
+						{
+							"label": "Humidity",
+							"value": 1
+						},
+						{
+							"label": "Temparature",
+							"value": 2
+						},
+						{
+							"label": "Hum + Temp",
+							"value": 3
+						}
+					]
+				},
+				{
+					"name": "Soil_Sensor_2",
+					"type": "Select",
+					"caption": "Soil Sensor 2",
+					"options": [
+						{
+							"label": "Off",
+							"value": 0
+						},
+						{
+							"label": "Humidity",
+							"value": 1
+						},
+						{
+							"label": "Temparature",
+							"value": 2
+						},
+						{
+							"label": "Hum + Temp",
+							"value": 3
+						}
+					]
+				},
+				{
+					"name": "Soil_Sensor_3",
+					"type": "Select",
+					"caption": "Soil Sensor 3",
+					"options": [
+						{
+							"label": "Off",
+							"value": 0
+						},
+						{
+							"label": "Humidity",
+							"value": 1
+						},
+						{
+							"label": "Temparature",
+							"value": 2
+						},
+						{
+							"label": "Hum + Temp",
+							"value": 3
+						}
+					]
+				},
+				{
+					"name": "Soil_Sensor_4",
+					"type": "Select",
+					"caption": "Soil Sensor 4",
+					"options": [
+						{
+							"label": "Off",
+							"value": 0
+						},
+						{
+							"label": "Humidity",
+							"value": 1
+						},
+						{
+							"label": "Temparature",
+							"value": 2
+						},
+						{
+							"label": "Hum + Temp",
+							"value": 3
+						}
+					]
+				},
+				{
+					"type": "CheckBox",
+					"name": "Leaf_Wetness_1",
+					"caption": "Leaf Wetness 1"
+				},
+				{
+					"type": "CheckBox",
+					"name": "Evaporation",
+					"caption": "Evaporation (Vantage PWS only)"
+				}
 			]
 		},
-		{ "type": "CheckBox", "name": "Leaf_Wetness_1", "caption": "Leaf Wetness 1" },
-		{ "type": "CheckBox", "name": "Evaporation", "caption": "Evaporation (Vantage PWS only)" },
-		{ "type": "Label", "label": "Statistics and Forecast (requires Meteobridge)" },
-		{ "type": "CheckBox", "name": "Statistics", "caption": "Statistics" },
-
-		{ "name": "Forecast", "type": "Select", "caption": "Forecast",
-		"options": [
-			{ "label": "Off", "value": "F_OFF" },
-			{ "label": "German", "value": "F_DE" },
-			{ "label": "English", "value": "F_EN" }
+		{
+			"type": "ExpansionPanel",
+			"caption": "Min/Max Statistics (requires Meteobridge)",
+			"items": [
+				{
+					"type": "Label",
+					"label": "A Meteobridge server will collect min/max data for various data points, e.g. Temperature. This data can be retrieved at 23:59:00."
+				},
+				{
+					"type": "CheckBox",
+					"name": "Statistics",
+					"caption": "Collect Statistics"
+				}
 			]
-		},
-
-		{ "type": "Label", "label": "Update Timer (0 = off)" },
-		{ "type": "IntervalBox", "name": "Timer", "caption": "Standard Timer" },
-		{ "type": "IntervalBox", "name": "WarningTimer", "caption": "Warning Timer" }
+		}		
     ],
 
 	"actions":
 	[
-		{ "type": "Button", "label": "Test Standard Data", "onClick": "MHS_SyncStation($id);" },
-		{ "type": "Button", "label": "Test Warning Data", "onClick": "MHS_WeatherWarning($id);" },
-		{ "type": "Button", "label": "Test Statistics Data", "onClick": "MHS_Statistics($id);" }
+		{
+			"type": "RowLayout",
+			"items": [
+				{
+					"type": "Button",
+					"label": "Test Standard Data",
+					"onClick": "MHS_SyncStation($id);"
+				},
+				{
+					"type": "Button",
+					"label": "Test Warning Data",
+					"onClick": "MHS_WeatherWarning($id);"
+				},
+				{
+					"type": "Button",
+					"label": "Test Statistics Data",
+					"onClick": "MHS_Statistics($id);"
+				}
+			]
+		}
 	]
 
 }

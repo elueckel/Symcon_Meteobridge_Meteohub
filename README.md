@@ -2,9 +2,11 @@
 
 Das Modul lädt diverse Wetterdaten von Meteobridge und Meteohub Servern herunter und stellt sie in Symcon als Variablen zur Verfügung. Dadurch lassen sich z.B. Davis Vantage, Vue und andere Wetterstationen relativ einfach integrieren.
 
+Für Fragen und Wünsche besuchen Sie bitte: https://www.symcon.de/forum/threads/39389-Modul-Meteobridge-Meteohub-%28z-B-f%C3%BCr-Davis-Vantage-Vue-%29?highlight=meteobridge
+
 ## Voraussetzungen
 
-IP-Symcon ab Version 5.x (darauf wurde entwickelt - sollte aber auch mit Version 4.x funktionieren (evtl. Probleme wegen verwendeter Profile).
+IP-Symcon ab Version 5.1
 
 ## Software-Installation
 
@@ -41,11 +43,9 @@ Daten Hier können die Sensoren ausgewählt werden.
 * Neu Hinzufügen von High Frequency Variablen für Markisen (Temp, Wind, Böen) und eigenem Timer
 * Neu Hinzufügen von Abfragen für Blattfeuchte (leider noch nicht getestet)
 * Neu Hinzufügen von Abfragen für Bodenfeuchte & -temperatur (leider noch nicht getestet)
-
 ### Version 2.1 04/12/2018
 * Neu Variable die die Windgeschwindigkeit in Text ausgibt
 * Fix Solarstrahlung wurde nicht ausgelesen
-
 
 ### Version 3.0 16/12/2018
 * Neu bei Verwendung einer Davis Vantage inkl. Solar Radiation Sensor wird die Evoparation ausgelesen
@@ -63,5 +63,13 @@ Daten Hier können die Sensoren ausgewählt werden.
 * Fix Blattfeuchte Sensor
 * Fix Komponente behält nun die alten Werte bei, falls die Meteobridge/Meteohub mal nicht erreichbar ist und setzt eine neue Error Variable auf welche man einen Trigger z.B. für den Versand einer Email setzen kann. 
 
+### Version 4.0 20/12/2020
+* Komplett überarbeitete Oberfläche für die Konfiguration
+* Code Cleanup
+* Debug Meldungen in der Konsole
+* Umstellung auf CURL um Abfragen bei WLAN Ausfällen sicherer zu gestalten
+* Timer für Min/Max Werte ins Modul verlegt - läuft immer um 23:59:00
+* Direkte Umrechnung der Solarstrahlung von Watt in Lux (neue Variable)
+
 ## Wo finde ich Informationen ob das Modul funktioniert
-Das Modul postet Informationen ins Log (Stand V2.0).
+Debugübersicht im Modul

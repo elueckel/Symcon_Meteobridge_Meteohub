@@ -1,4 +1,4 @@
-<?
+<?php
 
 if (!defined('vtBoolean')) {
     define('vtBoolean', 0);
@@ -21,7 +21,6 @@ if (!defined('vtBoolean')) {
 
 			//Properties
 			$this->RegisterPropertyInteger("SourceID", 0);
-
 			$this->RegisterPropertyString("Server_Address","");
 			$this->RegisterPropertyString("WeatherServer","B");
 			$this->RegisterPropertyString("User_Name", "");
@@ -42,8 +41,8 @@ if (!defined('vtBoolean')) {
 			$this->RegisterPropertyBoolean("Statistics", 0);
 			$this->RegisterPropertyString("Forecast", "F_OFF");
 			$this->RegisterPropertyBoolean("Wind", 0);
-      //$this->RegisterPropertyInteger("WebFrontInstanceID", 0);
-      //$this->RegisterPropertyBoolean("PushMsgAktiv", false);
+			//$this->RegisterPropertyInteger("WebFrontInstanceID", 0);
+			//$this->RegisterPropertyBoolean("PushMsgAktiv", false);
 			$this->RegisterPropertyInteger("Timer", 0);
 			$this->RegisterPropertyInteger("WarningTimer", 0);
 			$this->RegisterPropertyBoolean("Debug", 0);
@@ -56,12 +55,11 @@ if (!defined('vtBoolean')) {
 			//Component sets timer, but default is OFF
 			$this->RegisterTimer("UpdateTimer",0,"MHS_SyncStation(\$_IPS['TARGET']);");
 			$this->RegisterTimer("WarningTimer",0,"MHS_WeatherWarning(\$_IPS['TARGET']);");
-
+			$this->RegisterTimer("WeatherStatistics", 0, "MHS_WeatherStatistics(\$_IPS['TARGET']);");
 
 		}
 
-		public function ApplyChanges()
-		{
+		public function ApplyChanges() {
 
 			//Never delete this line!
 			parent::ApplyChanges();
@@ -77,102 +75,76 @@ if (!defined('vtBoolean')) {
 				$WarningTimerMS = $this->ReadPropertyInteger("WarningTimer") * 1000;
 				$this->SetTimerInterval("WarningTimer",$WarningTimerMS);
 
-
-				$vpos = 15;
-
 				//Statics Timer Creation - On - Off
 
 				$sourceID = $this->ReadPropertyInteger("SourceID");
-
-				$eid = @IPS_GetObjectIDByIdent("WeatherStatistics", $this->InstanceID);
-				if ($eid == 0) {
-					$eid = IPS_CreateEvent(1);
-					IPS_SetParent($eid, $this->InstanceID);
-					IPS_SetIdent($eid, "WeatherStatistics");
-					IPS_SetName($eid, "WeatherStatistics");
-					IPS_SetHidden($eid, true);
-					IPS_SetEventCyclic($eid, 2, 1, 0, 0, 0, 0);    //Jeden Tag
-					IPS_SetEventCyclicTimeFrom($eid, 23, 58, 0);
-					IPS_SetEventScript($eid, 'MHS_Statistics($_IPS[\'TARGET\'], "Up");');
-				}
-
-				If ($this->ReadPropertyBoolean("Statistics") == 1)
-				{
-					$eid = @IPS_GetObjectIDByIdent("WeatherStatistics", $this->InstanceID);
-					IPS_SetEventActive($eid, true);
-				}
-
-				If ($this->ReadPropertyBoolean("Statistics") == 0)
-				{
-					$eid = @IPS_GetObjectIDByIdent("WeatherStatistics", $this->InstanceID);
-					IPS_SetEventActive($eid, false);
-				}
 
 
 				//Creation of Custom Variables
 
 				if (IPS_VariableProfileExists("MHS.Solarradiation") == false){
-				IPS_CreateVariableProfile("MHS.Solarradiation", 2);
-				IPS_SetVariableProfileValues("MHS.Solarradiation", 0, 0, 1);
-				IPS_SetVariableProfileText("MHS.Solarradiation", "", " W/qm");
-				IPS_SetVariableProfileIcon("MHS.Solarradiation",  "Sun");
+					IPS_CreateVariableProfile("MHS.Solarradiation", 2);
+					IPS_SetVariableProfileValues("MHS.Solarradiation", 0, 0, 1);
+					IPS_SetVariableProfileText("MHS.Solarradiation", "", " W/qm");
+					IPS_SetVariableProfileIcon("MHS.Solarradiation",  "Sun");
 				}
 
 				if (IPS_VariableProfileExists("MHS.SoilMoisture") == false){
-				IPS_CreateVariableProfile("MHS.SoilMoisture", 1);
-				IPS_SetVariableProfileValues("MHS.SoilMoisture", 0, 0, 1);
-				IPS_SetVariableProfileText("MHS.SoilMoisture", "", " cb");
-				IPS_SetVariableProfileIcon("MHS.SoilMoisture",  "Drops");
+					IPS_CreateVariableProfile("MHS.SoilMoisture", 1);
+					IPS_SetVariableProfileValues("MHS.SoilMoisture", 0, 0, 1);
+					IPS_SetVariableProfileText("MHS.SoilMoisture", "", " cb");
+					IPS_SetVariableProfileIcon("MHS.SoilMoisture",  "Drops");
 				}
 
-
-
 				if (IPS_VariableProfileExists("MHS.Windspeed_Text") == false){
-				IPS_CreateVariableProfile("MHS.Windspeed_Text", 2);
-				IPS_SetVariableProfileValues("MHS.Windspeed_Text", 0, 0, 1);
-				IPS_SetVariableProfileDigits("MHS.Windspeed_Text", 1);
-				IPS_SetVariableProfileIcon("MHS.Windspeed_Text",  "WindSpeed");
-				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 0, "0 - Stille", "",-1);
-				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 0.3, "1 - schwacher Wind","",-1);
-				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 1.6, "2 - schwacher Wind","",-1);
-				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 3.4, "3 - schwacher Wind","",-1);
-				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 5.5, "4 - maesiger Wind","",-1);
-				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 8.0, "5 - frischer Wind","",-1);
-				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 10.8, "6 - starker Wind","",-1);
-				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 13.9, "7 - starker Wind","",-1);
-				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 17.2, "8 - Sturm","",-1);
-				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 20.8, "9 - starker Sturm","",-1);
-				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 24.5, "10 - schwerer Sturm","",-1);
-				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 28.5, "11 - orkanartiger Sturm","",-1);
-				IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 32.7, "12 - Orkan","",-1);
+					IPS_CreateVariableProfile("MHS.Windspeed_Text", 2);
+					IPS_SetVariableProfileValues("MHS.Windspeed_Text", 0, 0, 1);
+					IPS_SetVariableProfileDigits("MHS.Windspeed_Text", 1);
+					IPS_SetVariableProfileIcon("MHS.Windspeed_Text",  "WindSpeed");
+					IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 0, "0 - Stille", "",-1);
+					IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 0.3, "1 - schwacher Wind","",-1);
+					IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 1.6, "2 - schwacher Wind","",-1);
+					IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 3.4, "3 - schwacher Wind","",-1);
+					IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 5.5, "4 - maesiger Wind","",-1);
+					IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 8.0, "5 - frischer Wind","",-1);
+					IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 10.8, "6 - starker Wind","",-1);
+					IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 13.9, "7 - starker Wind","",-1);
+					IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 17.2, "8 - Sturm","",-1);
+					IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 20.8, "9 - starker Sturm","",-1);
+					IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 24.5, "10 - schwerer Sturm","",-1);
+					IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 28.5, "11 - orkanartiger Sturm","",-1);
+					IPS_SetVariableProfileAssociation("MHS.Windspeed_Text", 32.7, "12 - Orkan","",-1);
 				}
 
 				if (IPS_VariableProfileExists("MHS.Evaporation") == false){
-				IPS_CreateVariableProfile("MHS.Evaporation", 2);
-				IPS_SetVariableProfileValues("MHS.Evaporation", 0, 0, 1);
-				IPS_SetVariableProfileDigits("MHS.Evaporation", 1);
-				IPS_SetVariableProfileText("MHS.Evaporation", "", " mm");
-				IPS_SetVariableProfileIcon("MHS.Evaporation",  "Climate");
+					IPS_CreateVariableProfile("MHS.Evaporation", 2);
+					IPS_SetVariableProfileValues("MHS.Evaporation", 0, 0, 1);
+					IPS_SetVariableProfileDigits("MHS.Evaporation", 1);
+					IPS_SetVariableProfileText("MHS.Evaporation", "", " mm");
+					IPS_SetVariableProfileIcon("MHS.Evaporation",  "Climate");
 				}
 
 
 				//Station variables
 
+				$vpos = 20;
 				$this->MaintainVariable('Station_Temperature', $this->Translate('Station Temperature'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Station_ISS") == 1);
 				$this->MaintainVariable('Station_Humidity', $this->Translate('Station Humidity'), vtInteger, "~Humidity", $vpos++, $this->ReadPropertyBoolean("Station_ISS") == 1);
 				$this->MaintainVariable('Station_Dewpoint', $this->Translate('Station Dew Point'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Station_ISS") == 1);
 				$this->MaintainVariable('Station_AirPressure', $this->Translate('Station Air Pressure'), vtInteger, "~AirPressure", $vpos++, $this->ReadPropertyBoolean("Station_ISS") == 1);
 				$this->MaintainVariable('Station_SeaPressure', $this->Translate('Station Sealevel Air Pressure'), vtInteger, "~AirPressure", $vpos++, $this->ReadPropertyBoolean("Station_ISS") == 1);
 				$this->MaintainVariable('Station_LowBat', $this->Translate('Station Low Battery'), vtBoolean, "~Battery", $vpos++, $this->ReadPropertyBoolean("Station_ISS") == 1);
-        	$this->MaintainVariable('Station_Error', $this->Translate('Station Error'), vtBoolean, "", $vpos++, $this->ReadPropertyBoolean("Station_ISS") == 1);
+        		$this->MaintainVariable('Station_Error', $this->Translate('Station Error'), vtBoolean, "", $vpos++, $this->ReadPropertyBoolean("Station_ISS") == 1);
 
 				//Temperature sensor 1 variables
+				$vpos = 30;
 				$this->MaintainVariable('Sensor1_Temperature', $this->Translate('Sensor 1 Temperature'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Temperature_1") == 1);
 				$this->MaintainVariable('Sensor1_Humidity', $this->Translate('Sensor 1 Humidity'), vtInteger, "~Humidity", $vpos++, $this->ReadPropertyBoolean("Temperature_1") == 1);
 				$this->MaintainVariable('Sensor1_Dewpoint', $this->Translate('Sensor 1 Dew Point'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Temperature_1") == 1);
 				$this->MaintainVariable('Sensor1_LowBat', $this->Translate('Sensor 1 Low Battery'), vtBoolean, "~Battery", $vpos++, $this->ReadPropertyBoolean("Temperature_1") == 1);
 
 				//Wind sensor variables
+				$vpos = 40;
 				$this->MaintainVariable('Wind_Direction', $this->Translate('Wind Direction'), vtFloat, "~WindDirection.F", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
 				$this->MaintainVariable('Wind_Direction_Text', $this->Translate('Wind Direction Text'), vtFloat, "~WindDirection.Text", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
 				$this->MaintainVariable('Wind_Gust', $this->Translate('Wind Gust'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
@@ -182,21 +154,23 @@ if (!defined('vtBoolean')) {
 				$this->MaintainVariable('Wind_LowBat', $this->Translate('Wind Low Battery'), vtBoolean, "~Battery", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
 
 				//Rain sensor variables
+				$vpos = 50;
 				$this->MaintainVariable('Rain_Rate', $this->Translate('Rain Rate'), vtFloat, "~Rainfall", $vpos++, $this->ReadPropertyBoolean("Rain") == 1);
 				$this->MaintainVariable('Rain_Total', $this->Translate('Rain Total'), vtFloat, "~Rainfall", $vpos++, $this->ReadPropertyBoolean("Rain") == 1);
 				$this->MaintainVariable('Rain_Delta', $this->Translate('Rain Delta'), vtFloat, "~Rainfall", $vpos++, $this->ReadPropertyBoolean("Rain") == 1);
 				//$this->MaintainVariable('Rain_LowBat', $this->Translate('Rain Low Battery'), vtBoolean, "~Battery", $vpos++, $this->ReadPropertyBoolean("Rain") == 1);
 
 				//UV sensor variables
+				$vpos = 60;
 				$this->MaintainVariable('UV_Index', $this->Translate('UV Index'), vtInteger, "~UVIndex", $vpos++, $this->ReadPropertyBoolean("UV") == 1);
-				//$this->MaintainVariable('UV_LowBat', $this->Translate('UV Low Battery'), vtBoolean, "~Battery", $vpos++, $this->ReadPropertyBoolean("UV") == 1);
-
 
 				//Solar Radiation sensor variables
+				$vpos = 70;
 				$this->MaintainVariable('Solar_Radiation', $this->Translate('Solar Radiation'), vtFloat, "MHS.Solarradiation", $vpos++, $this->ReadPropertyBoolean("Solar_Radiation") == 1);
-				//$this->MaintainVariable('Solar_Radiation_LowBat', $this->Translate('Solar Radiation Low Battery'), vtBoolean, "~Battery", $vpos++, $this->ReadPropertyBoolean("Solar_Radiation") == 1);
+				$this->MaintainVariable('Solar_Radiation_Lux', $this->Translate('Solar Radiation Lux'), vtFloat, "~Illumination.F", $vpos++, $this->ReadPropertyBoolean("Solar_Radiation") == 1);
 
 				//Soil Moisture and Temperature sensor variables
+				$vpos = 80;
 				$this->MaintainVariable('Soil_Moisture1', $this->Translate('Soil Moisture 1'), vtInteger, "MHS.SoilMoisture", $vpos++, $this->ReadPropertyInteger("Soil_Sensor_1") == 1 OR $this->ReadPropertyInteger("Soil_Sensor_1") == 3);
 				$this->MaintainVariable('Soil_Temperature1', $this->Translate('Soil Temperature 1'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyInteger("Soil_Sensor_1") == 2 OR $this->ReadPropertyInteger("Soil_Sensor_1") == 3);
 				$this->MaintainVariable('Soil_Moisture2', $this->Translate('Soil Moisture 2'), vtInteger, "MHS.SoilMoisture", $vpos++, $this->ReadPropertyInteger("Soil_Sensor_2") == 1 OR $this->ReadPropertyInteger("Soil_Sensor_2") == 3);
@@ -209,9 +183,9 @@ if (!defined('vtBoolean')) {
 
 
 				//Leaf Wetness 1 sensor variables
+				$vpos = 90;
 				$this->MaintainVariable('Leaf_Wetness1', $this->Translate('Leaf Wetness 1'), vtFloat, "", $vpos++, $this->ReadPropertyBoolean("Leaf_Wetness_1") == 1);
-				//$this->MaintainVariable('Leaf_Wetness1_LowBat', $this->Translate('Leaf Wetness1 Low Battery'), vtBoolean, "~Battery", $vpos++, $this->ReadPropertyBoolean("Leaf Wetness1") == 1);
-
+				
 				//Evaporation calculation from Vantage
 				$this->MaintainVariable('Evaporation', $this->Translate('Evaporation'), vtFloat, "MHS.Evaporation", $vpos++, $this->ReadPropertyBoolean("Evaporation") == 1);
 
@@ -223,15 +197,32 @@ if (!defined('vtBoolean')) {
 				$this->MaintainVariable('Warning_Wind_Speed', $this->Translate('_Warning Wind Speed'), vtFloat, "~WindSpeed.ms", 11, $this->ReadPropertyInteger("WarningTimer") > 0);
 
 
+				if ($this->ReadPropertyBoolean("Statistics") == 1) {
+					$this->Statistics(); // get current data
 
+					$this->SetTimerInterval("WeatherStatistics", 86400000);
+					$CurrentTimer = $this->GetTimerInterval("WeatherStatistics");
+					//if ($CurrentTimer == 0) {
+					$now = new DateTime();
+					$target = new DateTime();
+					$now->getTimestamp();
+					//$nextHour = (intval($now->format('H')) + 1) % 24;
+					$target->setTime(23, 59, 00);
+					$diff = $target->getTimestamp() - $now->getTimestamp();
+					$EvaTimer = $diff * 1000;
+					$this->SetTimerInterval('WeatherStatistics', $EvaTimer);
+					//$this->SetTimerInterval("QueryAWATTAR",3600000);
+					//}
+				} else if ($this->ReadPropertyBoolean("Statistics") == 0) {
+					$this->SetTimerInterval("WeatherStatistics", 0);
+				}
 
 		}
 
 
 		//Fetch data from Station
 
-		public function SyncStation()
-		{
+		public function SyncStation() {
 
 			//$Debug = $this->ReadPropertyBoolean("Debug");
 
@@ -239,262 +230,253 @@ if (!defined('vtBoolean')) {
 			$User_Name = $this->ReadPropertyString("User_Name");
 			$Password = $this->ReadPropertyString("Password");
 
-			if($this->ReadPropertyString("WeatherServer") == "B")
-			{
-				$xml = simplexml_load_file('http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/livedataxml.cgi');
+			if($this->ReadPropertyString("WeatherServer") == "B") {
+				//$xml = simplexml_load_file('http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/livedataxml.cgi');
+				$url = 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/livedataxml.cgi';
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $url);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_HEADER, false);
+				curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+				$data = curl_exec($ch);
+				$xml = simplexml_load_string($data);
+				//var_dump($xml);
 			}
 
-			elseif($this->ReadPropertyString("WeatherServer") == "H")
-			{
+			elseif($this->ReadPropertyString("WeatherServer") == "H") {
 				$xml = simplexml_load_file('http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/meteolog.cgi?mode=data&type=xml&quotes=1');
 			}
 
 
-			If ($this->ReadPropertyBoolean("Station_ISS") == 1)
-			{
-
+			If ($this->ReadPropertyBoolean("Station_ISS") == 1)	{
 				$THB_XML = $xml->THB;
 				$sourceID = $this->ReadPropertyInteger("SourceID");
 
-        if (isset($THB_XML['temp']))
-				{
-            $THB_Temp = ($THB_XML['temp']);
-    				SetValue($this->GetIDForIdent("Station_Temperature"), (float)$THB_Temp);
-            SetValue($this->GetIDForIdent("Station_Error"), 0);
+				if (isset($THB_XML['temp'])) {
+					$THB_Temp = ($THB_XML['temp']);
+					$this->SendDebug('Station Temperature', (float)$THB_Temp . " C", 0);
+					SetValue($this->GetIDForIdent("Station_Temperature"), (float)$THB_Temp);
+					SetValue($this->GetIDForIdent("Station_Error"), 0);
 				}
-        else
-        {
-  				  SetValue($this->GetIDForIdent("Station_Error"), 1);
-            //WFC_PushNotification(ReadPropertyInteger(WebFrontInstanceID), 'Meteobridge nicht erreichbar', 'Batterie leer, WLAN weg', '', 0);
-        }
-
-
-        if (isset($THB_XML['hum']))
-				{
-          $THB_Hum = ($THB_XML['hum']);
-          SetValue($this->GetIDForIdent("Station_Humidity"), (integer)$THB_Hum);
+				else {
+					SetValue($this->GetIDForIdent("Station_Error"), 1);
+					//WFC_PushNotification(ReadPropertyInteger(WebFrontInstanceID), 'Meteobridge nicht erreichbar', 'Batterie leer, WLAN weg', '', 0);
 				}
 
-        if (isset($THB_XML['dew']))
-				{
-          $THB_Dew = ($THB_XML['dew']);
-  				SetValue($this->GetIDForIdent("Station_Dewpoint"), (float)$THB_Dew);
+
+				if (isset($THB_XML['hum']))	{
+					$THB_Hum = ($THB_XML['hum']);
+					$this->SendDebug('Station Humidity', (int)$THB_Hum , 0);
+					SetValue($this->GetIDForIdent("Station_Humidity"), (integer)$THB_Hum);
 				}
 
-        if (isset($THB_XML['press']))
-				{
-          $THB_Pressure = ($THB_XML['press']);
-  				SetValue($this->GetIDForIdent("Station_AirPressure"), (integer)$THB_Pressure);
+				if (isset($THB_XML['dew']))	{
+					$THB_Dew = ($THB_XML['dew']);
+					$this->SendDebug('Station Dewpoint', (float)$THB_Dew . " C", 0);
+					SetValue($this->GetIDForIdent("Station_Dewpoint"), (float)$THB_Dew);
 				}
 
-        if (isset($THB_XML['seapress']))
-				{
-          $THB_SeaPressure = ($THB_XML['seapress']);
-  				SetValue($this->GetIDForIdent("Station_SeaPressure"), (integer)$THB_SeaPressure);
+				if (isset($THB_XML['press'])) {
+					$THB_Pressure = ($THB_XML['press']);
+					$this->SendDebug('Station Airpressure', (int)$THB_Pressure, 0);
+					SetValue($this->GetIDForIdent("Station_AirPressure"), (integer)$THB_Pressure);
 				}
 
-        if (isset($THB_XML['lowbat']))
-				{
-          $THB_Lowbat = (!$THB_XML['lowbat']);
-  				SetValue($this->GetIDForIdent("Station_LowBat"), (bool)$THB_Lowbat);
+				if (isset($THB_XML['seapress'])) {
+					$THB_SeaPressure = ($THB_XML['seapress']);
+					$this->SendDebug('Station Sea Pressure', (int)$THB_SeaPressure, 0);
+					SetValue($this->GetIDForIdent("Station_SeaPressure"), (integer)$THB_SeaPressure);
+				}
+
+				if (isset($THB_XML['lowbat'])) {
+					$THB_Lowbat = (!$THB_XML['lowbat']);
+					SetValue($this->GetIDForIdent("Station_LowBat"), (bool)$THB_Lowbat);
 				}
 
 			}
 
-
-			If ($this->ReadPropertyBoolean("Temperature_1") == 1)
-			{
-
-        $TH_XML = $xml->TH;
+			If ($this->ReadPropertyBoolean("Temperature_1") == 1) {
+				$TH_XML = $xml->TH;
 				$sourceID = $this->ReadPropertyInteger("SourceID");
 
-        if (isset($TH_XML['temp']))
-				{
-          $TH_Temp = ($TH_XML['temp']);
-  				SetValue($this->GetIDForIdent("Sensor1_Temperature"), (float)$TH_Temp);
+				if (isset($TH_XML['temp']))	{
+					$TH_Temp = ($TH_XML['temp']);
+					$this->SendDebug('Sensor 1 Temperature', (float)$TH_Temp . " C", 0);
+					SetValue($this->GetIDForIdent("Sensor1_Temperature"), (float)$TH_Temp);
 				}
 
-        if (isset($TH_XML['hum']))
-				{
-          $TH_Hum = ($TH_XML['hum']);
-  				SetValue($this->GetIDForIdent("Sensor1_Humidity"), (float)$TH_Hum);
+				if (isset($TH_XML['hum'])) {
+					$TH_Hum = ($TH_XML['hum']);
+					$this->SendDebug('Sensor 1 Humidity', (float)$TH_Hum, 0);
+					SetValue($this->GetIDForIdent("Sensor1_Humidity"), (float)$TH_Hum);
 				}
 
-        if (isset($TH_XML['dew']))
-				{
-          $TH_Dew = ($TH_XML['dew']);
-  				SetValue($this->GetIDForIdent("Sensor1_Dewpoint"), (float)$TH_Dew);
+				if (isset($TH_XML['dew'])) {
+					$TH_Dew = ($TH_XML['dew']);
+					$this->SendDebug('Sensor 1 Dew Point', (float)$TH_Dew . " C", 0);
+					SetValue($this->GetIDForIdent("Sensor1_Dewpoint"), (float)$TH_Dew);
 				}
 
-        if (isset($TH_XML['lowbat']))
-				{
-          $TH_Lowbat = (!$TH_XML['lowbat']);
-  				SetValue($this->GetIDForIdent("Sensor1_LowBat"), (bool)$TH_Lowbat);
+				if (isset($TH_XML['lowbat'])) {
+					$TH_Lowbat = (!$TH_XML['lowbat']);
+					SetValue($this->GetIDForIdent("Sensor1_LowBat"), (bool)$TH_Lowbat);
 				}
 
 			}
 
 
-			If ($this->ReadPropertyBoolean("Wind") == 1)
-			{
+			If ($this->ReadPropertyBoolean("Wind") == 1) {
 				$Wind_XML = $xml->WIND;
 				$sourceID = $this->ReadPropertyInteger("SourceID");
 
-        if (isset($Wind_XML['dir']))
-				{
-          $Wind_Dir = ($Wind_XML['dir']);
-  				SetValue($this->GetIDForIdent("Wind_Direction"), (float)$Wind_Dir);
+				if (isset($Wind_XML['dir'])) {
+					$Wind_Dir = ($Wind_XML['dir']);
+					$this->SendDebug('Wind Direction', trim($Wind_Dir), 0);
+					SetValue($this->GetIDForIdent("Wind_Direction"), (float)$Wind_Dir);
 				}
 
-        if (isset($Wind_XML['dir']))
-				{
-          $Wind_Dir = ($Wind_XML['dir']);
-  				SetValue($this->GetIDForIdent("Wind_Direction_Text"), (float)$Wind_Dir);
+				if (isset($Wind_XML['dir'])) {
+					$Wind_Dir = ($Wind_XML['dir']);
+					SetValue($this->GetIDForIdent("Wind_Direction_Text"), (float)$Wind_Dir);
 				}
 
-        if (isset($Wind_XML['gust']))
-				{
-          $Wind_Gust = ($Wind_XML['gust']);
-  				SetValue($this->GetIDForIdent("Wind_Gust"), (float)$Wind_Gust);
+				if (isset($Wind_XML['gust'])) {
+					$Wind_Gust = ($Wind_XML['gust']);
+					$this->SendDebug('Wind Gust', $Wind_Gust . "m/s", 0);
+					SetValue($this->GetIDForIdent("Wind_Gust"), (float)$Wind_Gust);
 				}
 
-        if (isset($Wind_XML['wind']))
-				{
-          $Wind_Speed = ($Wind_XML['wind']);
-  				SetValue($this->GetIDForIdent("Wind_Speed"), (float)$Wind_Speed);
+				if (isset($Wind_XML['wind'])) {
+					$Wind_Speed = ($Wind_XML['wind']);
+					$this->SendDebug('Wind Speed', $Wind_Speed. "m/s", 0);
+					SetValue($this->GetIDForIdent("Wind_Speed"), (float)$Wind_Speed);
 				}
 
-        if (isset($Wind_XML['wind']))
-				{
-          $Wind_Speed = ($Wind_XML['wind']);
-  				SetValue($this->GetIDForIdent("Wind_Speed_Text"), (float)$Wind_Speed);
+				if (isset($Wind_XML['wind'])) {
+					$Wind_Speed = ($Wind_XML['wind']);
+					SetValue($this->GetIDForIdent("Wind_Speed_Text"), (float)$Wind_Speed);
 				}
 
-        if (isset($Wind_XML['chill']))
-				{
-          $Wind_Chill = ($Wind_XML['chill']);
-  				SetValue($this->GetIDForIdent("Wind_Chill"), (float)$Wind_Chill);
+				if (isset($Wind_XML['chill'])) {
+					$Wind_Chill = ($Wind_XML['chill']);
+					$this->SendDebug('Wind Chill', $Wind_Chill . "m/s", 0);
+					SetValue($this->GetIDForIdent("Wind_Chill"), (float)$Wind_Chill);
 				}
 
-        if (isset($Wind_XML['lowbat']))
-				{
-          $Wind_Lowbat = (!$Wind_XML['lowbat']);
-  				SetValue($this->GetIDForIdent("Wind_LowBat"), (bool)$Wind_Lowbat);
+				if (isset($Wind_XML['lowbat'])) {
+					$Wind_Lowbat = (!$Wind_XML['lowbat']);
+					SetValue($this->GetIDForIdent("Wind_LowBat"), (bool)$Wind_Lowbat);
 				}
 
 			}
 
 
-			If ($this->ReadPropertyBoolean("Rain") == 1)
-			{
+			If ($this->ReadPropertyBoolean("Rain") == 1) {
 				$Rain_XML = $xml->RAIN;
 				$sourceID = $this->ReadPropertyInteger("SourceID");
 
-        if (isset($Rain_XML['rate']))
-				{
-          $Rain_Rate = ($Rain_XML['rate']);
-  				SetValue($this->GetIDForIdent("Rain_Rate"), (float)$Rain_Rate);
+				if (isset($Rain_XML['rate'])) {
+					$Rain_Rate = ($Rain_XML['rate']);
+					$this->SendDebug('Rain Rate', trim($Rain_Rate) . "mm", 0);
+					SetValue($this->GetIDForIdent("Rain_Rate"), (float)$Rain_Rate);
 				}
 
-        if (isset($Rain_XML['total']))
-				{
-          $Rain_Total = ($Rain_XML['total']);
-  				SetValue($this->GetIDForIdent("Rain_Total"), (float)$Rain_Total);
+				if (isset($Rain_XML['total'])) {
+					$Rain_Total = ($Rain_XML['total']);
+					$this->SendDebug('Rain Total', trim($Rain_Total) . "mm", 0);
+					SetValue($this->GetIDForIdent("Rain_Total"), (float)$Rain_Total);
 				}
 
-        if (isset($Rain_XML['delta']))
-				{
-          $Rain_Delta = ($Rain_XML['delta']);
-  				SetValue($this->GetIDForIdent("Rain_Delta"), (float)$Rain_Delta);
+				if (isset($Rain_XML['delta'])) {
+					$Rain_Delta = ($Rain_XML['delta']);
+					$this->SendDebug('Rain Delta', trim($Rain_Delta). "mm", 0);
+					SetValue($this->GetIDForIdent("Rain_Delta"), (float)$Rain_Delta);
 				}
 
 			}
 
 
-			If ($this->ReadPropertyBoolean("UV") == 1)
-			{
-				$UV_XML = $xml->UV;
-				$sourceID = $this->ReadPropertyInteger("SourceID");
+				If ($this->ReadPropertyBoolean("UV") == 1) {
+					$UV_XML = $xml->UV;
+					$sourceID = $this->ReadPropertyInteger("SourceID");
 
-        if (isset($UV_XML['index']))
-				{
-          $UV_Index = ($UV_XML['index']);
-  				SetValue($this->GetIDForIdent("UV_Index"), (integer)$UV_Index);
+					if (isset($UV_XML['index'])) {
+						$UV_Index = ($UV_XML['index']);
+						$this->SendDebug('UV Index', trim($UV_Index), 0);
+						SetValue($this->GetIDForIdent("UV_Index"), (integer)$UV_Index);
+					}
+
+					//$UV_Lowbat = (!$UV_XML['lowbat']);
+					//SetValue($this->GetIDForIdent("UV_LowBat"), (bool)$UV_Lowbat);
+
 				}
 
-				//$UV_Lowbat = (!$UV_XML['lowbat']);
-				//SetValue($this->GetIDForIdent("UV_LowBat"), (bool)$UV_Lowbat);
+				If ($this->ReadPropertyBoolean("Solar_Radiation") == 1)	{
+					$Solar_Radiation_XML = $xml->SOL;
+					$sourceID = $this->ReadPropertyInteger("SourceID");
 
-			}
+					if (isset($Solar_Radiation_XML['rad'])) {
+						$Solar_Radiation = ($Solar_Radiation_XML['rad']);
+						SetValue($this->GetIDForIdent("Solar_Radiation"), (integer)$Solar_Radiation);
 
-			If ($this->ReadPropertyBoolean("Solar_Radiation") == 1)
-			{
-				$Solar_Radiation_XML = $xml->SOL;
-				$sourceID = $this->ReadPropertyInteger("SourceID");
+						$Lux = $Solar_Radiation * 0.13 * 1000;
+						SetValue($this->GetIDForIdent("Solar_Radiation_Lux"), (int)$Lux);
+					}
 
-        if (isset($Solar_Radiation_XML['rad']))
-				{
-          $Solar_Radiation = ($Solar_Radiation_XML['rad']);
-  				SetValue($this->GetIDForIdent("Solar_Radiation"), (integer)$Solar_Radiation);
 				}
 
-				//$Solar_Radiation_Lowbat = (!$Solar_Radiation_XML['lowbat']);
-				//SetValue($this->GetIDForIdent("Solar_Radiation_LowBat"), (bool)$Solar_Radiation_Lowbat);
-			}
+				If (($this->ReadPropertyInteger("Soil_Sensor_1") == 1) OR ($this->ReadPropertyInteger("Soil_Sensor_1") == 3)) {
 
-			If (($this->ReadPropertyInteger("Soil_Sensor_1") == 1) OR ($this->ReadPropertyInteger("Soil_Sensor_1") == 3))
-			{
+					$Server_Address = $this->ReadPropertyString("Server_Address");
+					$User_Name = $this->ReadPropertyString("User_Name");
+					$Password = $this->ReadPropertyString("Password");
 
-				$Server_Address = $this->ReadPropertyString("Server_Address");
-				$User_Name = $this->ReadPropertyString("User_Name");
-				$Password = $this->ReadPropertyString("Password");
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th10hum-act]');
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+					$Soil_Moisture1 = curl_exec($ch);
+					$this->SendDebug('Soil Moisture 4', trim($Soil_Moisture1) . " cb", 1);
+					SetValue($this->GetIDForIdent("Soil_Moisture1"), (float)trim($Soil_Moisture1));
+					curl_close($ch);
 
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th10hum-act]');
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 3);
-				$Soil_Moisture1 = curl_exec($ch);
-				SetValue($this->GetIDForIdent("Soil_Moisture1"), (float)trim($Soil_Moisture1));
-				curl_close($ch);
+				}
 
-			}
+				If (($this->ReadPropertyInteger("Soil_Sensor_1") == 2) OR ($this->ReadPropertyInteger("Soil_Sensor_1") == 3)) {
 
-			If (($this->ReadPropertyInteger("Soil_Sensor_1") == 2) OR ($this->ReadPropertyInteger("Soil_Sensor_1") == 3))
-			{
+					$Server_Address = $this->ReadPropertyString("Server_Address");
+					$User_Name = $this->ReadPropertyString("User_Name");
+					$Password = $this->ReadPropertyString("Password");
 
-				$Server_Address = $this->ReadPropertyString("Server_Address");
-				$User_Name = $this->ReadPropertyString("User_Name");
-				$Password = $this->ReadPropertyString("Password");
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th10temp-act]');
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+					$Soil_Temperature1 = curl_exec($ch);
+					$this->SendDebug('Soil Temperature 1', trim($Soil_Temperature1) . " C", 0);
+					SetValue($this->GetIDForIdent("Soil_Temperature1"), (float)trim($Soil_Temperature1));
+					curl_close($ch);
 
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th10temp-act]');
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 3);
-				$Soil_Temperature1 = curl_exec($ch);
-				SetValue($this->GetIDForIdent("Soil_Temperature1"), (float)trim($Soil_Temperature1));
-				curl_close($ch);
+				}
 
-			}
+				If (($this->ReadPropertyInteger("Soil_Sensor_2") == 1) OR ($this->ReadPropertyInteger("Soil_Sensor_2") == 3)) {
 
-			If (($this->ReadPropertyInteger("Soil_Sensor_2") == 1) OR ($this->ReadPropertyInteger("Soil_Sensor_2") == 3))
-			{
+					$Server_Address = $this->ReadPropertyString("Server_Address");
+					$User_Name = $this->ReadPropertyString("User_Name");
+					$Password = $this->ReadPropertyString("Password");
 
-				$Server_Address = $this->ReadPropertyString("Server_Address");
-				$User_Name = $this->ReadPropertyString("User_Name");
-				$Password = $this->ReadPropertyString("Password");
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th11hum-act]');
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+					$Soil_Moisture2 = curl_exec($ch);
+					$this->SendDebug('Soil Moisture 2', trim($Soil_Moisture2) . " cb", 0);
+					SetValue($this->GetIDForIdent("Soil_Moisture2"), (float)trim($Soil_Moisture2));
+					curl_close($ch);
 
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th11hum-act]');
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 3);
-				$Soil_Moisture2 = curl_exec($ch);
-				SetValue($this->GetIDForIdent("Soil_Moisture2"), (float)trim($Soil_Moisture2));
-				curl_close($ch);
+				}
 
-			}
-
-			If (($this->ReadPropertyInteger("Soil_Sensor_2") == 2) OR ($this->ReadPropertyInteger("Soil_Sensor_2") == 3))
-			{
+			If (($this->ReadPropertyInteger("Soil_Sensor_2") == 2) OR ($this->ReadPropertyInteger("Soil_Sensor_2") == 3)) {
 
 				$Server_Address = $this->ReadPropertyString("Server_Address");
 				$User_Name = $this->ReadPropertyString("User_Name");
@@ -505,13 +487,13 @@ if (!defined('vtBoolean')) {
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 				$Soil_Temperature2 = curl_exec($ch);
+				$this->SendDebug('Soil Temperature 2', trim($Soil_Temperature2) . " C", 0);
 				SetValue($this->GetIDForIdent("Soil_Temperature2"), (float)trim($Soil_Temperature2));
 				curl_close($ch);
 
 			}
 
-			If (($this->ReadPropertyInteger("Soil_Sensor_3") == 1) OR ($this->ReadPropertyInteger("Soil_Sensor_3") == 3))
-			{
+			If (($this->ReadPropertyInteger("Soil_Sensor_3") == 1) OR ($this->ReadPropertyInteger("Soil_Sensor_3") == 3)) {
 
 				$Server_Address = $this->ReadPropertyString("Server_Address");
 				$User_Name = $this->ReadPropertyString("User_Name");
@@ -522,13 +504,13 @@ if (!defined('vtBoolean')) {
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 				$Soil_Moisture3 = curl_exec($ch);
+				$this->SendDebug('Soil Moisture 3', trim($Soil_Moisture3) . " cb", 0);
 				SetValue($this->GetIDForIdent("Soil_Moisture3"), (float)trim($Soil_Moisture3));
 				curl_close($ch);
 
 			}
 
-			If (($this->ReadPropertyInteger("Soil_Sensor_3") == 2) OR ($this->ReadPropertyInteger("Soil_Sensor_3") == 3))
-			{
+			If (($this->ReadPropertyInteger("Soil_Sensor_3") == 2) OR ($this->ReadPropertyInteger("Soil_Sensor_3") == 3)) {
 
 				$Server_Address = $this->ReadPropertyString("Server_Address");
 				$User_Name = $this->ReadPropertyString("User_Name");
@@ -539,13 +521,13 @@ if (!defined('vtBoolean')) {
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 				$Soil_Temperature3 = curl_exec($ch);
+				$this->SendDebug('Soil Temperature 3', trim($Soil_Temperature3) . " C", 0);
 				SetValue($this->GetIDForIdent("Soil_Temperature3"), (float)trim($Soil_Temperature3));
 				curl_close($ch);
 
 			}
 
-			If (($this->ReadPropertyInteger("Soil_Sensor_4") == 1) OR ($this->ReadPropertyInteger("Soil_Sensor_4") == 3))
-			{
+			If (($this->ReadPropertyInteger("Soil_Sensor_4") == 1) OR ($this->ReadPropertyInteger("Soil_Sensor_4") == 3)) {
 
 				$Server_Address = $this->ReadPropertyString("Server_Address");
 				$User_Name = $this->ReadPropertyString("User_Name");
@@ -556,13 +538,13 @@ if (!defined('vtBoolean')) {
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 				$Soil_Moisture4 = curl_exec($ch);
+				$this->SendDebug('Soil Moisture 4', trim($Soil_Moisture4) . " cb", 0);
 				SetValue($this->GetIDForIdent("Soil_Moisture4"), (float)trim($Soil_Moisture4));
 				curl_close($ch);
 
 			}
 
-			If (($this->ReadPropertyInteger("Soil_Sensor_4") == 2) OR ($this->ReadPropertyInteger("Soil_Sensor_4") == 3))
-			{
+			If (($this->ReadPropertyInteger("Soil_Sensor_4") == 2) OR ($this->ReadPropertyInteger("Soil_Sensor_4") == 3)) {
 
 				$Server_Address = $this->ReadPropertyString("Server_Address");
 				$User_Name = $this->ReadPropertyString("User_Name");
@@ -573,63 +555,44 @@ if (!defined('vtBoolean')) {
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 				$Soil_Temperature4 = curl_exec($ch);
+				$this->SendDebug('Soil Temperature 4', trim($Soil_Temperature4)." C", 0);
 				SetValue($this->GetIDForIdent("Soil_Temperature4"), (float)trim($Soil_Temperature4));
 				curl_close($ch);
 
 			}
 
 
-			If ($this->ReadPropertyBoolean("Leaf_Wetness_1") == 1)
-			{
+			If ($this->ReadPropertyBoolean("Leaf_Wetness_1") == 1) {
 
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th16hum-act]');
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 				$leaf = curl_exec($ch);
-				$this->SendDebug('Result', $leaf,0);
-				$this->SendDebug('Result trim', trim($leaf),0);
+				$this->SendDebug('Leafwetness', trim($leaf),0);
 				SetValue($this->GetIDForIdent("Leaf_Wetness1"), (float)trim($leaf));
 				curl_close($ch);
 
 				//$Leaf_Wetness1 = (!$Leaf_Wetness1_XML['lowbat']);
 				//SetValue($this->GetIDForIdent("Leaf_Wetness1_LowBat"), (bool)$Leaf_Wetness1_Lowbat);
 
-
 			}
-			/*
-			If ($this->ReadPropertyBoolean("Leaf_Wetness_1") == 1)
-			{
-				$Leaf_Wetness1_XML = $xml->LEAF;
-				$sourceID = $this->ReadPropertyInteger("SourceID");
+			
 
-				$Leaf_Wetness1 = ($Leaf_Wetness1_XML['humidity']);
-				SetValue($this->GetIDForIdent("Leaf_Wetness1"), (float)$Leaf_Wetness1);
-
-				//$Leaf_Wetness1 = (!$Leaf_Wetness1_XML['lowbat']);
-				//SetValue($this->GetIDForIdent("Leaf_Wetness1_LowBat"), (bool)$Leaf_Wetness1_Lowbat);
-
-
-			}
-			*/
-
-			If ($this->ReadPropertyBoolean("Evaporation") == 1)
-			{
+			If ($this->ReadPropertyBoolean("Evaporation") == 1)	{
 
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[sol0evo-act]');
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 				$evo = curl_exec($ch);
-				$this->SendDebug('Result', $evo,0);
-				$this->SendDebug('Result trim', trim($evo),0);
+				$this->SendDebug('Evaporation', trim($evo),0);
 				SetValue($this->GetIDForIdent("Evaporation"), (float)trim($evo));
 				curl_close($ch);
 
 			}
 
-			if($this->ReadPropertyString("Forecast") == "F_DE")
-			{
+			if($this->ReadPropertyString("Forecast") == "F_DE")	{
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[forecast-textdehtml]');
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -638,8 +601,7 @@ if (!defined('vtBoolean')) {
 				SetValue($this->GetIDForIdent("Forecast"), (string)trim($Forecast));
 				curl_close($ch);
 			}
-			elseif($this->ReadPropertyString("Forecast") == "F_EN")
-			{
+			elseif($this->ReadPropertyString("Forecast") == "F_EN")	{
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[forecast-text]');
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -648,8 +610,7 @@ if (!defined('vtBoolean')) {
 				SetValue($this->GetIDForIdent("Forecast"), (string)trim($Forecast));
 				curl_close($ch);
 			}
-			elseif($this->ReadPropertyString("Forecast") == "F_OFF")
-			{
+			elseif($this->ReadPropertyString("Forecast") == "F_OFF") {
 				//do nothing
 			}
 
@@ -664,45 +625,40 @@ if (!defined('vtBoolean')) {
 			$User_Name = $this->ReadPropertyString("User_Name");
 			$Password = $this->ReadPropertyString("Password");
 
-			if($this->ReadPropertyString("WeatherServer") == "B")
-			{
-				$xml = simplexml_load_file('http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/livedataxml.cgi');
+			if($this->ReadPropertyString("WeatherServer") == "B") {
+				$url = 'http://' . $User_Name . ':' . $Password . '@' . $Server_Address . '/cgi-bin/livedataxml.cgi';
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $url);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_HEADER, false);
+				curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+				$data = curl_exec($ch);
+				$xml = simplexml_load_string($data);
 			}
-			elseif($this->ReadPropertyString("WeatherServer") == "H")
-			{
+			elseif($this->ReadPropertyString("WeatherServer") == "H") {
 				$xml = simplexml_load_file('http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/meteolog.cgi?mode=data&type=xml&quotes=1');
 			}
 
-			/*
-			$TH_XML = $xml->TH;
-			$sourceID = $this->ReadPropertyInteger("SourceID");
-
-			$TH_Temp = ($TH_XML['temp']);
-			SetValue($this->GetIDForIdent("Warning_Sensor1_Temperature"), (float)$TH_Temp);
-			*/
 			$Wind_XML = $xml->WIND;
 			$sourceID = $this->ReadPropertyInteger("SourceID");
 
-      if (isset($Wind_XML['gust']))
-      {
-        $Wind_Gust = ($Wind_XML['gust']);
-  			SetValue($this->GetIDForIdent("Warning_Wind_Gust"), (float)$Wind_Gust);
-      }
+			if (isset($Wind_XML['gust'])) {
+				$Wind_Gust = ($Wind_XML['gust']);
+					SetValue($this->GetIDForIdent("Warning_Wind_Gust"), (float)$Wind_Gust);
+			}
 
-      if (isset($Wind_XML['wind']))
-      {
-        $Wind_Speed = ($Wind_XML['wind']);
-  			SetValue($this->GetIDForIdent("Warning_Wind_Speed"), (float)$Wind_Speed);
-      }
+			if (isset($Wind_XML['wind'])) {
+				$Wind_Speed = ($Wind_XML['wind']);
+					SetValue($this->GetIDForIdent("Warning_Wind_Speed"), (float)$Wind_Speed);
+			}
 
 		}
 
-		public function Statistics()
-		{
+		public function Statistics() {
 
 			//Create Statics Variables
 
-			$vpos = 50;
+			$vpos = 200;
 
 			$this->MaintainVariable('Stat_Temp_S1_Min', $this->Translate('Statistic Temperature Sensor1 Min'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
 			$this->MaintainVariable('Stat_Temp_S1_Max', $this->Translate('Statistic Temperature Sensor1 Max'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Statistics") == 1);
@@ -860,7 +816,4 @@ if (!defined('vtBoolean')) {
 
 		}
 
-
 	}
-
-?>
