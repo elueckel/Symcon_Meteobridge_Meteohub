@@ -149,8 +149,8 @@ if (!defined('vtBoolean')) {
 				$this->MaintainVariable('Wind_Direction_Text', $this->Translate('Wind Direction Text'), vtFloat, "~WindDirection.Text", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
 				$this->MaintainVariable('Wind_Gust', $this->Translate('Wind Gust'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
 				$this->MaintainVariable('Wind_Speed', $this->Translate('Wind Speed'), vtFloat, "~WindSpeed.ms", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
-				$this->MaintainVariable('Wind_Gust_kmh', $this->Translate('Wind Gust KmH'), vtFloat, "~WindSpeed.kmh", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
-				$this->MaintainVariable('Wind_Speed_kmh', $this->Translate('Wind Speed KmH'), vtFloat, "~WindSpeed.kmh", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
+				$this->MaintainVariable('Wind_Gust_KmH', $this->Translate('Wind Gust km/h'), vtFloat, "~WindSpeed.kmh", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
+				$this->MaintainVariable('Wind_Speed_KmH', $this->Translate('Wind Speed km/h'), vtFloat, "~WindSpeed.kmh", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
 				$this->MaintainVariable('Wind_Speed_Text', $this->Translate('Wind Speed Text'), vtFloat, "MHS.Windspeed_Text", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
 				$this->MaintainVariable('Wind_Chill', $this->Translate('Wind Chill'), vtFloat, "~Temperature", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
 				$this->MaintainVariable('Wind_LowBat', $this->Translate('Wind Low Battery'), vtBoolean, "~Battery", $vpos++, $this->ReadPropertyBoolean("Wind") == 1);
@@ -197,8 +197,8 @@ if (!defined('vtBoolean')) {
 				//Warning Variables
 				$this->MaintainVariable('Warning_Wind_Gust', $this->Translate('_Warning Wind Gust'), vtFloat, "~WindSpeed.ms", 10, $this->ReadPropertyInteger("WarningTimer") > 0);
 				$this->MaintainVariable('Warning_Wind_Speed', $this->Translate('_Warning Wind Speed'), vtFloat, "~WindSpeed.ms", 11, $this->ReadPropertyInteger("WarningTimer") > 0);
-				$this->MaintainVariable('Warning_Wind_Gust_KmH', $this->Translate('_Warning Wind Gust KmH'), vtFloat, "~WindSpeed.kmh", 10, $this->ReadPropertyInteger("WarningTimer") > 0);
-				$this->MaintainVariable('Warning_Wind_Speed_KmH', $this->Translate('_Warning Wind Speed KmH'), vtFloat, "~WindSpeed.kmh", 11, $this->ReadPropertyInteger("WarningTimer") > 0);
+				$this->MaintainVariable('Warning_Wind_Gust_KmH', $this->Translate('_Warning Wind Gust km/h'), vtFloat, "~WindSpeed.kmh", 10, $this->ReadPropertyInteger("WarningTimer") > 0);
+				$this->MaintainVariable('Warning_Wind_Speed_KmH', $this->Translate('_Warning Wind Speed km/h'), vtFloat, "~WindSpeed.kmh", 11, $this->ReadPropertyInteger("WarningTimer") > 0);
 
 
 				if ($this->ReadPropertyBoolean("Statistics") == 1) {
