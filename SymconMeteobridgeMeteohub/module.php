@@ -77,7 +77,7 @@ if (!defined('vtBoolean')) {
 
 				//Statics Timer Creation - On - Off
 
-				$sourceID = $this->ReadPropertyInteger("SourceID");
+				////$sourceID = $this->ReadPropertyInteger("SourceID");
 
 
 				//Creation of Custom Variables
@@ -250,9 +250,9 @@ if (!defined('vtBoolean')) {
 			if (isset($xml)) {
 
 				If ($this->ReadPropertyBoolean("Station_ISS") == 1)	{
+					
 					$THB_XML = $xml->THB;
-					$sourceID = $this->ReadPropertyInteger("SourceID");
-
+					////$sourceID = $this->ReadPropertyInteger("SourceID");
 					if (isset($THB_XML['temp'])) {
 						$THB_Temp = ($THB_XML['temp']);
 						$this->SendDebug('Station Temperature', (float)$THB_Temp . " C", 0);
@@ -263,8 +263,7 @@ if (!defined('vtBoolean')) {
 						SetValue($this->GetIDForIdent("Station_Error"), 1);
 						//WFC_PushNotification(ReadPropertyInteger(WebFrontInstanceID), 'Meteobridge nicht erreichbar', 'Batterie leer, WLAN weg', '', 0);
 					}
-
-
+					
 					if (isset($THB_XML['hum']))	{
 						$THB_Hum = ($THB_XML['hum']);
 						$this->SendDebug('Station Humidity', (int)$THB_Hum , 0);
@@ -298,7 +297,7 @@ if (!defined('vtBoolean')) {
 
 				If ($this->ReadPropertyBoolean("Temperature_1") == 1) {
 					$TH_XML = $xml->TH;
-					$sourceID = $this->ReadPropertyInteger("SourceID");
+					////$sourceID = $this->ReadPropertyInteger("SourceID");
 
 					if (isset($TH_XML['temp']))	{
 						$TH_Temp = ($TH_XML['temp']);
@@ -328,7 +327,7 @@ if (!defined('vtBoolean')) {
 
 				If ($this->ReadPropertyBoolean("Wind") == 1) {
 					$Wind_XML = $xml->WIND;
-					$sourceID = $this->ReadPropertyInteger("SourceID");
+					////$sourceID = $this->ReadPropertyInteger("SourceID");
 
 					if (isset($Wind_XML['dir'])) {
 						$Wind_Dir = ($Wind_XML['dir']);
@@ -374,7 +373,7 @@ if (!defined('vtBoolean')) {
 
 				If ($this->ReadPropertyBoolean("Rain") == 1) {
 					$Rain_XML = $xml->RAIN;
-					$sourceID = $this->ReadPropertyInteger("SourceID");
+					//$sourceID = $this->ReadPropertyInteger("SourceID");
 
 					if (isset($Rain_XML['rate'])) {
 						$Rain_Rate = ($Rain_XML['rate']);
@@ -399,7 +398,7 @@ if (!defined('vtBoolean')) {
 
 					If ($this->ReadPropertyBoolean("UV") == 1) {
 						$UV_XML = $xml->UV;
-						$sourceID = $this->ReadPropertyInteger("SourceID");
+						//$sourceID = $this->ReadPropertyInteger("SourceID");
 
 						if (isset($UV_XML['index'])) {
 							$UV_Index = ($UV_XML['index']);
@@ -414,7 +413,7 @@ if (!defined('vtBoolean')) {
 
 					If ($this->ReadPropertyBoolean("Solar_Radiation") == 1)	{
 						$Solar_Radiation_XML = $xml->SOL;
-						$sourceID = $this->ReadPropertyInteger("SourceID");
+						//$sourceID = $this->ReadPropertyInteger("SourceID");
 
 						if (isset($Solar_Radiation_XML['rad'])) {
 							$Solar_Radiation = ($Solar_Radiation_XML['rad']);
@@ -643,7 +642,7 @@ if (!defined('vtBoolean')) {
 
 			if (isset($xml)) {
 				$Wind_XML = $xml->WIND;
-				$sourceID = $this->ReadPropertyInteger("SourceID");
+				//$sourceID = $this->ReadPropertyInteger("SourceID");
 
 				if (isset($Wind_XML['gust'])) {
 					$Wind_Gust = ($Wind_XML['gust']);
@@ -654,6 +653,7 @@ if (!defined('vtBoolean')) {
 					$Wind_Speed = ($Wind_XML['wind']);
 						SetValue($this->GetIDForIdent("Warning_Wind_Speed"), (float)$Wind_Speed);
 				}
+				
 			}
 
 		}
