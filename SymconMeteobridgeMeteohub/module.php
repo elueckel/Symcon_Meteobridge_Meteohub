@@ -359,7 +359,7 @@ if (!defined('vtBoolean')) {
 						SetValue($this->GetIDForIdent("Wind_Speed"), (float)$Wind_Speed);
 						$WindSpeedKmH = $Wind_Speed * 3.6;
 						$this->SendDebug('Wind Speed KmH', $WindSpeedKmH . "KmH", 0);
-						SetValue($this->GetIDForIdent("WindSpeedKmH"), (float)$WindSpeedKmH);
+						SetValue($this->GetIDForIdent("Wind_Speed_KmH"), (float)$WindSpeedKmH);
 					}
 
 					if (isset($xml->WIND['wind'])) {
