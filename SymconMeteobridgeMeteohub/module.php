@@ -55,7 +55,7 @@ if (!defined('vtBoolean')) {
 			//Component sets timer, but default is OFF
 			$this->RegisterTimer("UpdateTimer",0,"MHS_SyncStation(\$_IPS['TARGET']);");
 			$this->RegisterTimer("WarningTimer",0,"MHS_WeatherWarning(\$_IPS['TARGET']);");
-			$this->RegisterTimer("WeatherStatistics", 0, "MHS_WeatherStatistics(\$_IPS['TARGET']);");
+			$this->RegisterTimer("WeatherStatistics", 0, "MHS_Statistics(\$_IPS['TARGET']);");
 
 		}
 
