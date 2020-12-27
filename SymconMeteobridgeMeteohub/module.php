@@ -200,16 +200,26 @@ if (!defined('vtBoolean')) {
 				$this->MaintainVariable('Warning_Wind_Gust_KmH', $this->Translate('_Warning Wind Gust km/h'), vtFloat, "~WindSpeed.kmh", 10, $this->ReadPropertyInteger("WarningTimer") > 0);
 				$this->MaintainVariable('Warning_Wind_Speed_KmH', $this->Translate('_Warning Wind Speed km/h'), vtFloat, "~WindSpeed.kmh", 11, $this->ReadPropertyInteger("WarningTimer") > 0);
 
+				$this->SetStatisticsTimer();
 
-				if ($this->ReadPropertyBoolean("Statistics") == 1) {
-					$this->Statistics(); // get current data
+		}
 
-					$this->SetTimerInterval("WeatherStatistics", 86400000);
+		public function SetStatisticsTimer() {
+			
+			if ($this->ReadPropertyBoolean("Statistics") == 1) {
+					//$this->Statistics(); // get current data
+					
+					//$this->SetTimerInterval("WeatherStatistics", 86400000);
 					$CurrentTimer = $this->GetTimerInterval("WeatherStatistics");
 					//if ($CurrentTimer == 0) {
 					$now = new DateTime();
 					$target = new DateTime();
 					$now->getTimestamp();
+					$NewTime = "23:59:00";
+	
+					if ($NewTime < date("H:i:s")) {
+						$target->modify('+1 day');
+					}
 					//$nextHour = (intval($now->format('H')) + 1) % 24;
 					$target->setTime(23, 59, 00);
 					$diff = $target->getTimestamp() - $now->getTimestamp();
@@ -217,11 +227,11 @@ if (!defined('vtBoolean')) {
 					$this->SetTimerInterval('WeatherStatistics', $EvaTimer);
 					//$this->SetTimerInterval("QueryAWATTAR",3600000);
 					//}
-				} else if ($this->ReadPropertyBoolean("Statistics") == 0) {
-					$this->SetTimerInterval("WeatherStatistics", 0);
-				}
-
+			} else if ($this->ReadPropertyBoolean("Statistics") == 0) {
+				$this->SetTimerInterval("WeatherStatistics", 0);
+			}
 		}
+
 
 
 		//Fetch data from Station
@@ -833,6 +843,7 @@ if (!defined('vtBoolean')) {
 				SetValue($this->GetIDForIdent("Stat_Rain"), (float)trim($Stat_Rain));
 				curl_close($ch);
 
+			$this->SetStatisticsTimer();
 
 		}
 
