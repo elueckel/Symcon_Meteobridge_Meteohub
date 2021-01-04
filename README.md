@@ -63,7 +63,7 @@ Daten Hier können die Sensoren ausgewählt werden.
 * Fix Blattfeuchte Sensor
 * Fix Komponente behält nun die alten Werte bei, falls die Meteobridge/Meteohub mal nicht erreichbar ist und setzt eine neue Error Variable auf welche man einen Trigger z.B. für den Versand einer Email setzen kann. 
 
-### Version 4.0 28/12/2020
+### Version 4.0 04/01/2021
 * Komplett überarbeitete Oberfläche für die Konfiguration
 * Code Cleanup
 * Debug Meldungen in der Konsole
