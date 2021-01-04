@@ -10,7 +10,7 @@ if (!defined('vtBoolean')) {
 }
 
 
-	class Symcon_Meteobridge_Meteohub extends IPSModule
+	class Meteobridge_Meteohub extends IPSModule
 
 	{
 
