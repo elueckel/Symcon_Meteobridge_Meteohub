@@ -25,7 +25,7 @@ Username and Password: Credentials to log into the server
 Now the sensors can be selected, which should be made available in Symcon - obviously depending on the configuration of the Weather Station.
 
 
-### Version 4.0 20/12/2020
+### Version 4.0 28/12/2020
 * Complete Redesign of the config UI
 * Code Cleanup
 * Debug messages can be check in the console
