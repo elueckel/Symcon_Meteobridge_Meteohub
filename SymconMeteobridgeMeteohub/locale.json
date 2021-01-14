@@ -9,6 +9,7 @@
 			"Password": "Passwort",
 			"Values to be loaded (will create variables)": "Daten die geladen werden sollen (Variablen werden erstellt)",
 			"Basic Sensor Data": "Standard Daten der Station",
+			"Type of Weather Server": "Typ des Wetterservers",
 			"Station ISS - Indor Central Unit": "Station ISS - Empfangseinheit Innen",
 			"Temperature Sensor1": "Temperatur Sensor1",
 			"Temperature Sensor2": "Temperatur Sensor2",
