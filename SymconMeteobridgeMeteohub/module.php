@@ -401,7 +401,7 @@ if (!defined('vtBoolean')) {
 						SetValue($this->GetIDForIdent("Rain_Rate"), (float)$Rain_Rate);
 					}
 
-					if (isset($Rain_XML['total'])) {
+					if (isset($xml->RAIN['total'])) {
 						$Rain_Total = ($xml->RAIN['total']);
 						$this->SendDebug('Rain Total', trim($Rain_Total) . "mm", 0);
 						SetValue($this->GetIDForIdent("Rain_Total"), (float)$Rain_Total);
