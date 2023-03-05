@@ -585,7 +585,7 @@ if (!defined('vtBoolean')) {
 					If ($this->ReadPropertyBoolean("Leaf_Wetness_1") == 1) {
 
 						$ch = curl_init();
-						curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th16hum-act]');
+						curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th15hum-act]');
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 						curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 						$leaf = curl_exec($ch);
