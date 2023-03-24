@@ -71,5 +71,9 @@ Daten Hier können die Sensoren ausgewählt werden.
 * Timer für Min/Max Werte ins Modul verlegt - läuft immer um 23:59:00
 * Direkte Umrechnung der Solarstrahlung von Watt in Lux (neue Variable)
 
+### Version 4.01 24/03/2023
+* Fix - Abfrage Blattfeuchte angepasst
+* Fix - Timer für Abfrage von Bodensensoren angepasst um Timmeout zu vermeiden
+
 ## Wo finde ich Informationen ob das Modul funktioniert
 Debugübersicht im Modul
