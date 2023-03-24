@@ -33,5 +33,9 @@ Now the sensors can be selected, which should be made available in Symcon - obvi
 * Timer for Min/Max is not internal 
 * Direct conversion of Solar Readiation from Watt to Lux
 
+### Version 4.01 24/03/2023
+* Fix - Changed Leafwetness sensor request
+* Fix - Extended timer for Soilsensors to avoid timeouts
+
 ## What can be learn more if things do not work
 Debug mode of the module. 
