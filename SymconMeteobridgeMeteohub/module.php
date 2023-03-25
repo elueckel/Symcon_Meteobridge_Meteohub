@@ -207,11 +207,7 @@ if (!defined('vtBoolean')) {
 		public function SetStatisticsTimer() {
 			
 			if ($this->ReadPropertyBoolean("Statistics") == 1) {
-					//$this->Statistics(); // get current data
-					
-					//$this->SetTimerInterval("WeatherStatistics", 86400000);
 					$CurrentTimer = $this->GetTimerInterval("WeatherStatistics");
-					//if ($CurrentTimer == 0) {
 					$now = new DateTime();
 					$target = new DateTime();
 					$now->getTimestamp();
@@ -225,8 +221,6 @@ if (!defined('vtBoolean')) {
 					$diff = $target->getTimestamp() - $now->getTimestamp();
 					$EvaTimer = $diff * 1000;
 					$this->SetTimerInterval('WeatherStatistics', $EvaTimer);
-					//$this->SetTimerInterval("QueryAWATTAR",3600000);
-					//}
 			} else if ($this->ReadPropertyBoolean("Statistics") == 0) {
 				$this->SetTimerInterval("WeatherStatistics", 0);
 			}
@@ -454,7 +448,7 @@ if (!defined('vtBoolean')) {
 						$ch = curl_init();
 						curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th10hum-act]');
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+						curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 						$Soil_Moisture1 = curl_exec($ch);
 						$this->SendDebug('Soil Moisture 4', trim($Soil_Moisture1) . " cb", 1);
 						SetValue($this->GetIDForIdent("Soil_Moisture1"), (float)trim($Soil_Moisture1));
@@ -471,7 +465,7 @@ if (!defined('vtBoolean')) {
 						$ch = curl_init();
 						curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th10temp-act]');
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+						curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 						$Soil_Temperature1 = curl_exec($ch);
 						$this->SendDebug('Soil Temperature 1', trim($Soil_Temperature1) . " C", 0);
 						SetValue($this->GetIDForIdent("Soil_Temperature1"), (float)trim($Soil_Temperature1));
@@ -488,7 +482,7 @@ if (!defined('vtBoolean')) {
 						$ch = curl_init();
 						curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th11hum-act]');
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+						curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 						$Soil_Moisture2 = curl_exec($ch);
 						$this->SendDebug('Soil Moisture 2', trim($Soil_Moisture2) . " cb", 0);
 						SetValue($this->GetIDForIdent("Soil_Moisture2"), (float)trim($Soil_Moisture2));
@@ -505,7 +499,7 @@ if (!defined('vtBoolean')) {
 						$ch = curl_init();
 						curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th11temp-act]');
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+						curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 						$Soil_Temperature2 = curl_exec($ch);
 						$this->SendDebug('Soil Temperature 2', trim($Soil_Temperature2) . " C", 0);
 						SetValue($this->GetIDForIdent("Soil_Temperature2"), (float)trim($Soil_Temperature2));
@@ -522,7 +516,7 @@ if (!defined('vtBoolean')) {
 						$ch = curl_init();
 						curl_setopt($ch, CURLOPT_URL, 'http://'.$User_Name.':'.$Password.'@'.$Server_Address.'/cgi-bin/template.cgi?template=[th12hum-act]');
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+						curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 						$Soil_Moisture3 = curl_exec($ch);
 						$this->SendDebug('Soil Moisture 3', trim($Soil_Moisture3) . " cb", 0);
 						SetValue($this->GetIDForIdent("Soil_Moisture3"), (float)trim($Soil_Moisture3));
