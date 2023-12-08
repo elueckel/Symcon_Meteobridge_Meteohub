@@ -75,5 +75,8 @@ Daten Hier können die Sensoren ausgewählt werden.
 * Fix - Abfrage Blattfeuchte angepasst
 * Fix - Timer für Abfrage von Bodensensoren angepasst um Timeout zu vermeiden
 
+### Version 4.02 08/12/2023
+* Fix - Abfragetimeout verlängert
+
 ## Wo finde ich Informationen ob das Modul funktioniert
 Debugübersicht im Modul
