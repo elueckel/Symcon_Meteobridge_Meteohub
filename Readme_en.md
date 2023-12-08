@@ -37,5 +37,8 @@ Now the sensors can be selected, which should be made available in Symcon - obvi
 * Fix - Changed Leafwetness sensor request
 * Fix - Extended timer for Soilsensors to avoid timeouts
 
+### Version 4.02 08/12/2023
+* Fix - Increased request timeout
+
 ## What can be learn more if things do not work
 Debug mode of the module. 
